@@ -5,6 +5,7 @@ threadsafe: true
 handlers:
 - url: /
   static_files: dist/index.html
+  upload: dist/index.html
 
 - url: /about
   static_dir: dist/about

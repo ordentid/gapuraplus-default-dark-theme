@@ -12,6 +12,15 @@ handlers:
 - url: /test
   static_dir: dist/
 
+- url: /assets/css
+  static_dir: dist/assets/css
+
+- url: /assets/js
+  static_dir: dist/assets/js
+
+- url: /assets/static
+  static_dir: dist/assets/static
+
 env_variables:
   HOST: '0.0.0.0'
   NODE_ENV: 'production'

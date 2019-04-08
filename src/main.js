@@ -5,7 +5,7 @@ import DefaultLayout from '~/layouts/Default.vue'
 import colors from 'vuetify/es5/util/colors'
 import Vuetify from 'vuetify'
 
-import '../../node_modules/vuetify/dist/vuetify.min.css'
+import '../node_modules/vuetify/dist/vuetify.min.css'
 
 export default function (Vue, { router, head, isClient }) {
   // Set default layout as a global component

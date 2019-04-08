@@ -59,8 +59,8 @@ module.exports = function (api) {
     })
 
     WelcomePost.addNode({
-      title: 'Welcome Post',
       fields: {
+        id: 1,
         title: 'Welcome',
         content: '<p>Hello World!</p><p>Some initial <strong>bold</strong> text</p><p><br></p><p>pancen oye~~~~~</p>',
         cover_image: 'http://newschoolkaidan.com/wp-content/uploads/2018/04/pyxis-profile-20180406.jpg'
@@ -68,8 +68,8 @@ module.exports = function (api) {
     })
 
     ProfilePost.addNode({
-      title: 'Profile Post',
       fields: {
+        id: 1,
         title: 'About Us',
         content: '<p>Hello World!</p><p>Some initial <strong>bold</strong> text</p><p><br></p><p>pancen oye~~~~~</p>',
         cover_image: 'https://vignette.wikia.nocookie.net/jpop/images/f/ff/Pikkushi.jpg/revision/latest?cb=20181005082741'

@@ -21,7 +21,8 @@
 <script>
 export default {
   metaInfo: {
-    title: 'Hello, world!'
+    title: 'Hello, world!',
+    charset: 'utf-8'
   }
 }
 </script>

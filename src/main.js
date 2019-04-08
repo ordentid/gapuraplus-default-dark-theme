@@ -4,11 +4,8 @@
 import DefaultLayout from '~/layouts/Default.vue'
 import colors from 'vuetify/es5/util/colors'
 import Vuetify from 'vuetify'
-import KsVueFullpage from 'ks-vue-fullpage'
-import Velocity from 'velocity-animate'
-import Hammerjs from 'hammerjs'
 
-import 'vuetify/dist/vuetify.min.css'
+import '../../node_modules/vuetify/dist/vuetify.min.css'
 
 export default function (Vue, { router, head, isClient }) {
   // Set default layout as a global component
@@ -29,8 +26,4 @@ export default function (Vue, { router, head, isClient }) {
       success: colors.green.accent3
     }
   })
-
-  Vue.use(KsVueFullpage)
-  Vue.use('velocity', Velocity)
-  Vue.use('hammerjs', Hammerjs)
 }

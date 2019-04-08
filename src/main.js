@@ -4,6 +4,7 @@
 import DefaultLayout from '~/layouts/Default.vue'
 import colors from 'vuetify/es5/util/colors'
 import Vuetify from 'vuetify'
+import KsVueFullpage from 'ks-vue-fullpage'
 
 import '../node_modules/vuetify/dist/vuetify.min.css'
 
@@ -26,4 +27,6 @@ export default function (Vue, { router, head, isClient }) {
       success: colors.green.accent3
     }
   })
+  
+  Vue.use(KsVueFullpage)
 }

@@ -68,7 +68,7 @@ module.exports = function (api) {
           let productPost = await axios.get(getProductPostUrl, {headers: headers})
           productPost = productPost.data.data
 
-          if (productPost != null && productPost != undefined){
+          if (productPost != null && productPost != undefined && productPost.id != null){
             ProductPost.addNode({
               fields: {
                 id: 1,

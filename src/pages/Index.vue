@@ -6,15 +6,67 @@
   >
   <div id="app">
     <ksvuefp :options="options" :sections="sections">
+       <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" :clipped="clipped" fixed app dark floating class="hidden-sm-and-up" width="225px">
+         <v-layout column wrap fill-height align-end justify-center>
+          <v-list>
+            <div v-for="(menu, i) in sideMenu" :key="i">
+              <v-list-tile @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: menu.section_id})" @click="drawer = false" class="my-3">
+                  <v-list-tile-content>
+                      <v-list-tile-title v-text="menu.name" justify-end/>
+                  </v-list-tile-content>
+              </v-list-tile>
+            </div>
+          </v-list>
+         </v-layout>
+      </v-navigation-drawer>
       <v-toolbar
-        :clipped-left="clipped"
         :color="'#1C1B20'"
+        :clipped-left="clipped"
         fixed
         app
         flat
         height='70%'
+        class="hidden-sm-and-down"
       >
         <v-layout xs12 justify-center align-center>
+          <v-toolbar-side-icon @click="drawer = !drawer" class="hover hidden-sm-and-up" style="color: whitesmoke;"/>
+          <template v-if="item.useIcons">
+            <v-btn
+              icon
+              @click.stop="miniVariant = !miniVariant"
+            >
+              <v-icon>{{ `chevron_${miniVariant ? 'right' : 'left'}` }}</v-icon>
+            </v-btn>
+          </template>
+          <template v-else>
+            <v-toolbar-title class="title default-color mr-5" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: 0})">{{ item.contentTitle }}</v-toolbar-title>
+          </template>
+          <v-btn flat depressed color="white" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: 1})" class="hidden-sm-and-down">
+            TENTANG KAMI
+          </v-btn>
+          <template v-if="item.useProducts">
+            <v-btn flat depressed color="white" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: item.productSectionId})" class="hidden-sm-and-down">
+              PRODUK
+            </v-btn>
+          </template>
+           <template v-if="item.useContacts">
+            <v-btn flat depressed color="white" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: item.contactSectionId})" class="hidden-sm-and-down">
+              HUBUNGI KAMI
+            </v-btn>
+          </template>
+        </v-layout>
+      </v-toolbar>
+      <v-toolbar
+        :color="'#1C1B20'"
+        :clipped-left="clipped"
+        fixed
+        app
+        flat
+        height='70%'
+        class="hidden-sm-and-up"
+      >
+        <v-layout xs12 justify-left align-center>
+          <v-toolbar-side-icon @click="drawer = !drawer" class="hover hidden-sm-and-up" style="color: whitesmoke;"/>
           <template v-if="item.useIcons">
             <v-btn
               icon
@@ -25,19 +77,6 @@
           </template>
           <template v-else>
             <v-toolbar-title class="title default-color" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: 0})">{{ item.contentTitle }}</v-toolbar-title>
-          </template>
-          <v-btn flat depressed color="white" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: 1})">
-            ABOUT US
-          </v-btn>
-          <template v-if="item.useProducts">
-            <v-btn flat depressed color="white" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: item.productSectionId})">
-              PRODUCTS
-            </v-btn>
-          </template>
-           <template v-if="item.useContacts">
-            <v-btn flat depressed color="white" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: item.contactSectionId})">
-              CONTACT US
-            </v-btn>
           </template>
         </v-layout>
       </v-toolbar>
@@ -91,7 +130,8 @@
                       xs3 md3 lg3 sm6 fill-width pb-2 pt-2 px-2 mx-1
                       v-for="product in productList"
                       :items="product"
-                      v-bind:key="product.node.id">
+                      v-bind:key="product.node.id"
+                      class="hidden-sm-and-down">
                         <v-card tile flat color="#1C1B20" style="color: whitesmoke;">
                           <v-layout row wrap justify-center align-start fill-height>
                             <template v-if="product.node.as_icon">
@@ -290,7 +330,10 @@ export default {
         preloaderText: 'Loading...',
         dotNavEnabled: false,
         parallax: true
-      }
+      },
+      clipped: false,
+      drawer: false,
+      miniVariant: false
     }
   },
   computed: {
@@ -312,6 +355,22 @@ export default {
     },
     productList() {
       return this.$page.productList.edges
+    },
+    sideMenu() {
+      let sideMenu = []
+      sideMenu.push({section_id: 0, name: 'Beranda'})
+      sideMenu.push({section_id: 1, name: 'Tentang Kami'})
+
+      console.log(this.item)
+
+      if (this.item.useProducts){
+        sideMenu.push({section_id: this.item.productSectionId, name: 'Produk'})
+      }
+      if (this.item.useContacts){
+        sideMenu.push({section_id: this.item.contactSectionId, name: 'Hubungi Kami'})
+      }
+
+      return sideMenu
     }
   },
   mounted() {

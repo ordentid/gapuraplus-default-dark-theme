@@ -49,7 +49,7 @@
         <template v-if="s.node.id % 2 == 1">
           <v-layout fluid fill-height fill-width ma-0 pt-5 odd-content>
             <template v-if="s.node.name == 'home'">
-              <template v-if="welcomePost.coverImage !== null && welcomePost.coverImage !== undefined">
+              <template v-if="welcomePost.coverImage !== null && welcomePost.coverImage !== undefined && welcomePost.coverImage != 'null'">
                 <v-parallax
                   dark
                   :src="welcomePost.coverImage"
@@ -78,11 +78,11 @@
                   dark
                   :src="profilePost.coverImage"
                   class="cover-image-not-full"
-                  height="100%"/>
+                  height="100%" />
               </v-layout>
             </template>
             <template v-if="s.node.name == 'products'">
-              <!-- <v-layout column fluid justify-center>
+              <v-layout column fluid justify-center>
                 <span class="display-1 text-xs-center font-weight-strong pt-4">{{ productPost.title}}</span>
                 <span class="body-1 text-xs-center pt-4 mb-3" v-html="productPost.content"></span>
                 <v-container fluid layout align-center>
@@ -91,24 +91,24 @@
                       xs3 md3 lg3 sm6 fill-width pb-2 pt-2 px-2 mx-1
                       v-for="product in productList"
                       :items="product"
-                      v-bind:key="product.id">
+                      v-bind:key="product.node.id">
                         <v-card tile flat color="#1C1B20" style="color: whitesmoke;">
                           <v-layout row wrap justify-center align-start fill-height>
-                            <template v-if="product.as_icon">
+                            <template v-if="product.node.as_icon">
                               <v-flex xs2>
-                                <v-img :src="product.image_main" max-height="50px" max-width="50px"/>
+                                <v-img :src="product.node.image_main" max-height="50px" max-width="50px"/>
                               </v-flex>
                               <v-flex xs7>
                                 <v-layout column wrap>
-                                  <span class="body-2 text-xs-left text-xs-middle font-weight-strong ml-2 mb-1">{{ product.name}}</span>
-                                  <span class="caption text-xs-left text-xs-middle ml-2">{{ product.summary }}</span>
+                                  <span class="body-2 text-xs-left text-xs-middle font-weight-strong ml-2 mb-1">{{ product.node.name}}</span>
+                                  <span class="caption text-xs-left text-xs-middle ml-2">{{ product.node.summary }}</span>
                                 </v-layout>
                               </v-flex>
                             </template>
                             <template v-else>
                               <v-layout column fixed wrap width="50%">
-                                <span class="body-2 text-xs-left text-xs-middle font-weight-strong ml-3 mb-1">{{ product.name}}</span>
-                                <span class="caption text-xs-left text-xs-middle ml-3">{{ product.summary }}</span>
+                                <span class="body-2 text-xs-left text-xs-middle font-weight-strong ml-3 mb-1">{{ product.node.name}}</span>
+                                <span class="caption text-xs-left text-xs-middle ml-3">{{ product.node.summary }}</span>
                               </v-layout>
                             </template>
                           </v-layout>
@@ -116,7 +116,7 @@
                     </v-flex>
                   </v-layout>
                 </v-container>
-              </v-layout> -->
+              </v-layout>
             </template>
             <template v-if="s.node.name == 'contacts'">
               <div class="pt-4">
@@ -128,7 +128,7 @@
         <template v-else>
           <v-layout fluid fill-height fill-width ma-0 pt-5 even-content>
             <template v-if="s.node.name == 'home'">
-              <template v-if="welcomePost.coverImage !== null && welcomePost.coverImage !== undefined">
+              <template v-if="welcomePost.coverImage !== null && welcomePost.coverImage !== undefined && welcomePost.coverImage != null">
                 <v-parallax
                   dark
                   :src="welcomePost.coverImage"
@@ -161,7 +161,7 @@
               </v-layout>
             </template>
             <template v-if="s.node.name == 'products'">
-              <!-- <v-layout column fluid justify-center>
+              <v-layout column fluid justify-center>
                 <span class="display-1 text-xs-center font-weight-strong pt-4">{{ productPost.title}}</span>
                 <span class="body-1 text-xs-center pt-4 mb-3" v-html="productPost.content"></span>
                 <v-container fluid layout align-center>
@@ -170,24 +170,24 @@
                       xs3 md3 lg3 sm6 fill-width pb-2 pt-2 px-2 mx-1
                       v-for="product in productList"
                       :items="product"
-                      v-bind:key="product.id">
+                      v-bind:key="product.node.id">
                         <v-card tile flat color="#1C1B20" style="color: whitesmoke;">
                           <v-layout row wrap justify-center align-start fill-height>
-                            <template v-if="product.as_icon">
+                            <template v-if="product.node.as_icon">
                               <v-flex xs2>
-                                <v-img :src="product.image_main" max-height="50px" max-width="50px"/>
+                                <v-img :src="product.node.image_main" max-height="50px" max-width="50px"/>
                               </v-flex>
                               <v-flex xs7>
                                 <v-layout column wrap>
-                                  <span class="body-2 text-xs-left text-xs-middle font-weight-strong ml-2 mb-1">{{ product.name}}</span>
-                                  <span class="caption text-xs-left text-xs-middle ml-2">{{ product.summary }}</span>
+                                  <span class="body-2 text-xs-left text-xs-middle font-weight-strong ml-2 mb-1">{{ product.node.name}}</span>
+                                  <span class="caption text-xs-left text-xs-middle ml-2">{{ product.node.summary }}</span>
                                 </v-layout>
                               </v-flex>
                             </template>
                             <template v-else>
                               <v-layout column fixed wrap width="50%">
-                                <span class="body-2 text-xs-left text-xs-middle font-weight-strong ml-3 mb-1">{{ product.name}}</span>
-                                <span class="caption text-xs-left text-xs-middle ml-3">{{ product.summary }}</span>
+                                <span class="body-2 text-xs-left text-xs-middle font-weight-strong ml-3 mb-1">{{ product.node.name}}</span>
+                                <span class="caption text-xs-left text-xs-middle ml-3">{{ product.node.summary }}</span>
                               </v-layout>
                             </template>
                           </v-layout>
@@ -195,7 +195,7 @@
                     </v-flex>
                   </v-layout>
                 </v-container>
-              </v-layout> -->
+              </v-layout>
             </template>
             <template v-if="s.node.name == 'contacts'">
               <v-container column fluid justify-center align-start wrap mt-5 pa-0>
@@ -250,6 +250,23 @@ query getPageData {
     title
     content
     coverImage
+  },
+  productPost: productPost(id:"1") {
+    id
+    title
+    content
+    coverImage
+  },
+  productList: allProductList(sortBy:"id", order:ASC) {
+    edges {
+      node {
+        id
+        asIcon
+        imageMain
+        name
+        summary
+      }
+    }
   }
 }
 </page-query>
@@ -289,12 +306,13 @@ export default {
     profilePost() {
       return this.$page.profilePost
     },
-    // productPost() {
-    //   return this.$store.state.post.Product
-    // },
-    // productList() {
-    //   return this.$store.state.product.Products
-    // }
+    productPost() {
+      console.log(this.$page.productPost)
+      return this.$page.productPost
+    },
+    productList() {
+      return this.$page.productList.edges
+    }
   },
   mounted() {
     let Velocity = require('velocity-animate')
@@ -302,7 +320,6 @@ export default {
 
     this.velocity = Velocity
     this.hammerjs = hammerjs
-    console.log(this.$ksvuefp.currentIndex)
   },
   watch: {
   }
@@ -371,6 +388,7 @@ body {
 .cover-image-not-full {
   height: 100%;
   width: 30%;
+  background-color: #1C1B20;
 }
 
 .product-header {
@@ -382,4 +400,5 @@ body {
   height: 100%;
   width: 100%
 }
+
 </style>

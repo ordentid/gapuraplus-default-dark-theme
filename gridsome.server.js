@@ -108,7 +108,7 @@ module.exports = function (api) {
               ProductList.addNode({
                 fields: {
                   id: i,
-                  as_icon: false,
+                  as_icon: true,
                   image_main: 'null',
                   name: 'Default Product Item',
                   summary: 'Default Product item summary'

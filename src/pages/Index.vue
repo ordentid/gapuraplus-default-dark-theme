@@ -26,7 +26,7 @@
         app
         flat
         height='70%'
-        class="hidden-sm-and-down"
+        class="hidden-sm-and-down pa-0"
       >
         <v-layout xs12 justify-center align-center>
           <v-toolbar-side-icon @click="drawer = !drawer" class="hover hidden-sm-and-up" style="color: whitesmoke;"/>
@@ -62,7 +62,6 @@
         fixed
         app
         flat
-        height='70%'
         class="hidden-sm-and-up"
       >
         <v-layout xs12 justify-left align-center>
@@ -88,27 +87,29 @@
         <template v-if="s.node.id % 2 == 1">
           <v-layout fluid fill-height fill-width ma-0 pt-5 odd-content>
             <template v-if="s.node.name == 'home'">
-              <template v-if="welcomePost.coverImage !== null && welcomePost.coverImage !== undefined && welcomePost.coverImage != 'null'">
-                <v-parallax
-                  dark
-                  :src="welcomePost.coverImage"
-                  class="cover-image-full"
-                  height="100%">
-                    <v-layout column wrap justify-center align-center>
-                      <span class="display-3 font-weight-strong mb-5">{{ welcomePost.title}}</span>
-                      <span class="subheading text-xs-center" v-html="welcomePost.content" />
-                    </v-layout>
-                </v-parallax>
-              </template>
-              <template v-else>
-                <v-layout column wrap justify-center align-center>
-                  <span class="display-3 font-weight-strong mb-5">{{ welcomePost.title}}</span>
-                  <span class="subheading text-xs-center" v-html="welcomePost.content" />
-                </v-layout>
-              </template>
+              <v-parallax
+                dark
+                :src="welcomePost.coverImage"
+                class="cover-image-full hidden-sm-and-down"
+                height="100%">
+                  <v-layout column wrap justify-center align-center>
+                    <span class="display-3 font-weight-strong mb-5">{{ welcomePost.title}}</span>
+                    <span class="subheading text-xs-center" v-html="welcomePost.content" />
+                  </v-layout>
+              </v-parallax>
+              <v-parallax
+                dark
+                :src="welcomePost.coverImage"
+                class="cover-image-full hidden-sm-and-up"
+                height="100%">
+                  <v-layout column wrap justify-center align-center>
+                    <span class="display-1 font-weight-strong mb-5">{{ welcomePost.title}}</span>
+                    <span class="subheading text-xs-center" v-html="welcomePost.content" />
+                  </v-layout>
+              </v-parallax>
             </template>
             <template v-if="s.node.name == 'profile'">
-              <v-layout row>
+              <v-layout row class="hidden-sm-and-down">
                 <v-layout column wrap justify-left align-left pl-4 pt-5>
                   <span class="display-3 font-weight-strong mb-5">{{ profilePost.title}}</span>
                   <span class="subheading" v-html="profilePost.content" />
@@ -119,24 +120,34 @@
                   class="cover-image-not-full"
                   height="100%" />
               </v-layout>
+              <v-layout column class="hidden-sm-and-up">
+                <v-parallax
+                  dark
+                  :src="profilePost.coverImage"
+                  class="cover-image-not-full-mobile"
+                  height="200px"/>
+                <v-layout column wrap justify-center px-0 pt-0>
+                  <span class="display-1 font-weight-strong mb-5">{{ profilePost.title}}</span>
+                  <span class="subheading" v-html="profilePost.content" />
+                </v-layout>
+              </v-layout>
             </template>
             <template v-if="s.node.name == 'products'">
-              <v-layout column fluid justify-center>
+              <v-layout column fluid justify-center class="hidden-sm-and-down">
                 <span class="display-1 text-xs-center font-weight-strong pt-4">{{ productPost.title}}</span>
                 <span class="body-1 text-xs-center pt-4 mb-3" v-html="productPost.content"></span>
                 <v-container fluid layout align-center>
-                  <v-layout row wrap product-detail justify-center fill-height fill-width align-start pl-3>
+                  <v-layout row wrap product-detail justify-center fill-height fill-width align-start pl-3 style="overflow: hidden;">
                     <v-flex
                       xs3 md3 lg3 sm6 fill-width pb-2 pt-2 px-2 mx-1
                       v-for="product in productList"
                       :items="product"
-                      v-bind:key="product.node.id"
-                      class="hidden-sm-and-down">
+                      v-bind:key="product.node.id">
                         <v-card tile flat color="#1C1B20" style="color: whitesmoke;">
                           <v-layout row wrap justify-center align-start fill-height>
-                            <template v-if="product.node.as_icon">
+                            <template v-if="product.node.asIcon">
                               <v-flex xs2>
-                                <v-img :src="product.node.image_main" max-height="50px" max-width="50px"/>
+                                <v-img :src="product.node.imageMain" max-height="100px" max-width="100px"/>
                               </v-flex>
                               <v-flex xs7>
                                 <v-layout column wrap>
@@ -157,6 +168,40 @@
                   </v-layout>
                 </v-container>
               </v-layout>
+              <v-layout column fluid justify-center class="hidden-sm-and-up">
+                <span class="display-1 text-xs-center font-weight-strong pt-2">{{ productPost.title}}</span>
+                <span class="body-1 text-xs-center pt-2 mb-2" v-html="productPost.content"></span>
+                <v-container fluid layout align-center pa-0 ma-0>
+                  <v-layout row wrap product-detail justify-center fill-height fill-width align-start pl-0 style="overflow: hidden;">
+                    <v-flex
+                      xs3 md3 lg3 sm6 fill-width pb-2 pt-2 px-2 mx-1
+                      v-for="product in productList"
+                      :items="product"
+                      v-bind:key="product.node.id">
+                        <v-card tile flat color="#1C1B20" style="color: whitesmoke;" class="hidden-sm-and-up">
+                          <v-layout column wrap justify-center align-start fill-height>
+                            <template v-if="product.node.asIcon">
+                              <v-flex xs12 class="layout fill-width">
+                                <v-img :src="product.node.imageMain" height="50px" width="50px"/>
+                              </v-flex>
+                              <v-flex xs12>
+                                <v-layout column wrap>
+                                  <span class="body-2 text-xs-center text-xs-middle font-weight-strong mt-2">{{ product.node.name}}</span>
+                                </v-layout>
+                              </v-flex>
+                            </template>
+                            <template v-else>
+                              <v-layout column fixed wrap>
+                                <span class="body-2 text-xs-center text-xs-middle font-weight-strong ml-3 mb-1">{{ product.node.name}}</span>
+                                <span class="caption text-xs-center text-xs-middle ml-3">{{ product.node.summary }}</span>
+                              </v-layout>
+                            </template>
+                          </v-layout>
+                        </v-card>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
+              </v-layout>
             </template>
             <template v-if="s.node.name == 'contacts'">
               <div class="pt-4">
@@ -168,27 +213,29 @@
         <template v-else>
           <v-layout fluid fill-height fill-width ma-0 pt-5 even-content>
             <template v-if="s.node.name == 'home'">
-              <template v-if="welcomePost.coverImage !== null && welcomePost.coverImage !== undefined && welcomePost.coverImage != null">
-                <v-parallax
-                  dark
-                  :src="welcomePost.coverImage"
-                  class="cover-image-full"
-                  height="100%">
-                    <v-layout column wrap justify-center align-center>
-                      <span class="display-3 font-weight-strong mb-5">{{ welcomePost.title}}</span>
-                      <span class="subheading text-xs-center" v-html="welcomePost.content" />
-                    </v-layout>
-                </v-parallax>
-              </template>
-              <template v-else>
-                <v-layout column wrap justify-center align-center>
-                  <span class="display-3 font-weight-strong mb-5">{{ welcomePost.title}}</span>
-                  <span class="subheading text-xs-center" v-html="welcomePost.content" />
-                </v-layout>
-              </template>
+              <v-parallax
+                dark
+                :src="welcomePost.coverImage"
+                class="cover-image-full hidden-sm-and-down"
+                height="100%">
+                  <v-layout column wrap justify-center align-center>
+                    <span class="display-3 font-weight-strong mb-5">{{ welcomePost.title}}</span>
+                    <span class="subheading text-xs-center" v-html="welcomePost.content" />
+                  </v-layout>
+              </v-parallax>
+              <v-parallax
+                dark
+                :src="welcomePost.coverImage"
+                class="cover-image-full hidden-sm-and-up"
+                height="100%">
+                  <v-layout column wrap justify-center align-center>
+                    <span class="display-1 font-weight-strong mb-5">{{ welcomePost.title}}</span>
+                    <span class="subheading text-xs-center" v-html="welcomePost.content" />
+                  </v-layout>
+              </v-parallax>
             </template>
             <template v-if="s.node.name == 'profile'">
-              <v-layout row>
+              <v-layout row class="hidden-sm-and-down">
                 <v-layout column wrap justify-left align-left pl-4 pt-5>
                   <span class="display-3 font-weight-strong mb-5">{{ profilePost.title}}</span>
                   <span class="subheading" v-html="profilePost.content" />
@@ -197,15 +244,26 @@
                   dark
                   :src="profilePost.coverImage"
                   class="cover-image-not-full"
-                  height="100%"/>
+                  height="100%" />
+              </v-layout>
+              <v-layout column class="hidden-sm-and-up">
+                <v-parallax
+                  dark
+                  :src="profilePost.coverImage"
+                  class="cover-image-not-full-mobile"
+                  height="200px"/>
+                <v-layout column wrap justify-center px-0 pt-0>
+                  <span class="display-1 font-weight-strong mb-5">{{ profilePost.title}}</span>
+                  <span class="subheading" v-html="profilePost.content" />
+                </v-layout>
               </v-layout>
             </template>
             <template v-if="s.node.name == 'products'">
-              <v-layout column fluid justify-center>
+              <v-layout column fluid justify-center class="hidden-sm-and-down">
                 <span class="display-1 text-xs-center font-weight-strong pt-4">{{ productPost.title}}</span>
                 <span class="body-1 text-xs-center pt-4 mb-3" v-html="productPost.content"></span>
                 <v-container fluid layout align-center>
-                  <v-layout row wrap product-detail justify-center fill-height fill-width align-start pl-3>
+                  <v-layout row wrap product-detail justify-center fill-height fill-width align-start pl-3 style="overflow: hidden;">
                     <v-flex
                       xs3 md3 lg3 sm6 fill-width pb-2 pt-2 px-2 mx-1
                       v-for="product in productList"
@@ -213,9 +271,9 @@
                       v-bind:key="product.node.id">
                         <v-card tile flat color="#1C1B20" style="color: whitesmoke;">
                           <v-layout row wrap justify-center align-start fill-height>
-                            <template v-if="product.node.as_icon">
+                            <template v-if="product.node.asIcon">
                               <v-flex xs2>
-                                <v-img :src="product.node.image_main" max-height="50px" max-width="50px"/>
+                                <v-img :src="product.node.imageMain" max-height="100px" max-width="100px"/>
                               </v-flex>
                               <v-flex xs7>
                                 <v-layout column wrap>
@@ -228,6 +286,40 @@
                               <v-layout column fixed wrap width="50%">
                                 <span class="body-2 text-xs-left text-xs-middle font-weight-strong ml-3 mb-1">{{ product.node.name}}</span>
                                 <span class="caption text-xs-left text-xs-middle ml-3">{{ product.node.summary }}</span>
+                              </v-layout>
+                            </template>
+                          </v-layout>
+                        </v-card>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
+              </v-layout>
+              <v-layout column fluid justify-center class="hidden-sm-and-up">
+                <span class="display-1 text-xs-center font-weight-strong pt-2">{{ productPost.title}}</span>
+                <span class="body-1 text-xs-center pt-2 mb-2" v-html="productPost.content"></span>
+                <v-container fluid layout align-center pa-0 ma-0>
+                  <v-layout row wrap product-detail justify-center fill-height fill-width align-start pl-0 style="overflow: hidden;">
+                    <v-flex
+                      xs3 md3 lg3 sm6 fill-width pb-2 pt-2 px-2 mx-1
+                      v-for="product in productList"
+                      :items="product"
+                      v-bind:key="product.node.id">
+                        <v-card tile flat color="#1C1B20" style="color: whitesmoke;" class="hidden-sm-and-up">
+                          <v-layout column wrap justify-center align-start fill-height>
+                            <template v-if="product.node.asIcon">
+                              <v-flex xs12 class="layout fill-width">
+                                <v-img :src="product.node.imageMain" height="50px" width="50px"/>
+                              </v-flex>
+                              <v-flex xs12>
+                                <v-layout column wrap>
+                                  <span class="body-2 text-xs-center text-xs-middle font-weight-strong mt-2">{{ product.node.name}}</span>
+                                </v-layout>
+                              </v-flex>
+                            </template>
+                            <template v-else>
+                              <v-layout column fixed wrap>
+                                <span class="body-2 text-xs-center text-xs-middle font-weight-strong ml-3 mb-1">{{ product.node.name}}</span>
+                                <span class="caption text-xs-center text-xs-middle ml-3">{{ product.node.summary }}</span>
                               </v-layout>
                             </template>
                           </v-layout>
@@ -350,7 +442,6 @@ export default {
       return this.$page.profilePost
     },
     productPost() {
-      console.log(this.$page.productPost)
       return this.$page.productPost
     },
     productList() {
@@ -447,6 +538,12 @@ body {
 .cover-image-not-full {
   height: 100%;
   width: 30%;
+  background-color: #1C1B20;
+}
+
+.cover-image-not-full-mobile {
+  height: 40%;
+  width: 100%;
   background-color: #1C1B20;
 }
 

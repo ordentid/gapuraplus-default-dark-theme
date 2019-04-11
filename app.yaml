@@ -18,6 +18,9 @@ handlers:
 - url: /assets/static
   static_dir: dist/assets/static
 
+- url: /images
+  static_dir: dist/images
+
 env_variables:
   HOST: '0.0.0.0'
   NODE_ENV: 'production'

@@ -109,7 +109,7 @@ module.exports = function (api) {
                 fields: {
                   id: i,
                   as_icon: true,
-                  image_main: 'null',
+                  image_main: './images/default-icon-' + i + '.png',
                   name: 'Default Product Item',
                   summary: 'Default Product item summary'
                 }

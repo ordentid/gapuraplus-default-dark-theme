@@ -119,6 +119,25 @@ module.exports = function (api) {
         } catch(error){
           console.log(error)
         }
+      } else {
+        ProductPost.addNode({
+          fields: {
+            id: 1,
+            title: 'null',
+            cover_image: 'null',
+            content: 'null'
+          }
+        })
+
+        ProductList.addNode({
+          fields: {
+            id: 1,
+            as_icon: false,
+            image_main: 'null',
+            name: 'null',
+            summary: 'null'
+          }
+        })
       }
 
       if (configData.use_contacts){
@@ -134,7 +153,7 @@ module.exports = function (api) {
         })
       }
 
-      if (configData != null && configData != null){
+      if (configData != null){
         Config.addNode({
           title: 'User Config',
           id: 1,

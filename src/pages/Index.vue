@@ -132,7 +132,7 @@
                 </v-layout>
               </v-layout>
             </template>
-            <template v-if="s.node.name == 'products'">
+            <template v-if="s.node.name == 'products' && item.useProducts">
               <v-layout column fluid justify-center class="hidden-sm-and-down">
                 <span class="display-1 text-xs-center font-weight-strong pt-4">{{ productPost.title}}</span>
                 <span class="body-1 text-xs-center pt-4 mb-3" v-html="productPost.content"></span>
@@ -258,7 +258,7 @@
                 </v-layout>
               </v-layout>
             </template>
-            <template v-if="s.node.name == 'products'">
+            <template v-if="s.node.name == 'products' && item.useProducts">
               <v-layout column fluid justify-center class="hidden-sm-and-down">
                 <span class="display-1 text-xs-center font-weight-strong pt-4">{{ productPost.title}}</span>
                 <span class="body-1 text-xs-center pt-4 mb-3" v-html="productPost.content"></span>
@@ -371,19 +371,19 @@ query getPageData {
       }
     }
   },
-  welcomePost: welcomePost(id:"1") {
+  welcomePost: welcomePost(id:"1", nullable:true) {
     id
     title
     content
     coverImage
   },
-  profilePost: profilePost(id:"1") {
+  profilePost: profilePost(id:"1", nullable:true) {
     id
     title
     content
     coverImage
   },
-  productPost: productPost(id:"1") {
+  productPost: productPost(id:"1", nullable:true) {
     id
     title
     content

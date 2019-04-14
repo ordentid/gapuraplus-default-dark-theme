@@ -204,9 +204,52 @@
               </v-layout>
             </template>
             <template v-if="s.node.name == 'contacts'">
-              <div class="pt-4">
-                Contacts
-              </div>
+              <v-container fluid fill-height pa-0 fill-width>
+                <v-layout column wrap fill-width align-start ma-0 pt-3 hidden-sm-and-down>
+                  <v-toolbar color="#1C1B20" flat fill-width depressed mt-5 style="color:whitesmoke; position: relative;">
+                    <v-layout xs12 row wrap fill-width justify-center>
+                      <v-toolbar-title class="title strong text-xs-header mr-5 pr-5" v-text="'Send email to us for further inquiry'" />
+                      <v-toolbar-items class="ml-5 pl-5">
+                        <v-btn :href="item.mailLink">Contact Us</v-btn>
+                      </v-toolbar-items>
+                    </v-layout>
+                  </v-toolbar>
+                  <v-layout row wrap fill-width align-center justify-center>
+                    <template v-for="(contact, i) in contactList">
+                      <v-avatar size="44px" :key="i" color="grey" class="mx-3 clickable" @click="goToLink(contact.node.value)">
+                        <v-img :src="contact.node.iconSrc" max-height="30" max-width="30"></v-img>
+                      </v-avatar>
+                    </template>
+                  </v-layout>
+                  <v-toolbar color="#1C1B20" flat fill-width depressed height="60" style="color:whitesmoke;">
+                    <v-layout xs12 row wrap fill-width justify-center>
+                      <v-toolbar-title class="body-2" v-text="'Created by Ordent'" />
+                    </v-layout>
+                  </v-toolbar>
+                </v-layout>
+                <v-layout column wrap fill-width fill-height align-start ma-0 pt-2 hidden-sm-and-up>
+                  <v-toolbar color="#1C1B20" flat depressed style="color:whitesmoke;" class="py-1">
+                    <v-layout xs12 column wrap fill-width justify-center>
+                      <v-toolbar-title class="subheading strong text-xs-center pb-2" v-text="'Send email to us for further inquiry'" />
+                      <v-toolbar-items class="justify-center pb-3">
+                        <v-btn :href="item.mailLink">Contact Us</v-btn>
+                      </v-toolbar-items>
+                    </v-layout>
+                  </v-toolbar>
+                  <v-layout row wrap fill-width align-center justify-center>
+                    <template v-for="(contact, i) in contactList">
+                      <v-avatar size="44px" :key="i" color="grey" class="mx-3 clickable" @click="goToLink(contact.node.value)">
+                        <v-img :src="contact.node.iconSrc" max-height="30" max-width="30"></v-img>
+                      </v-avatar>
+                    </template>
+                  </v-layout>
+                  <v-toolbar color="#1C1B20" flat fill-width depressed height="60" style="color:whitesmoke;">
+                    <v-layout xs12 row wrap fill-width justify-center>
+                      <v-toolbar-title class="caption" v-text="'Created by Ordent'" />
+                    </v-layout>
+                  </v-toolbar>
+                </v-layout>
+              </v-container>
             </template>
         </v-layout>
         </template>
@@ -330,15 +373,51 @@
               </v-layout>
             </template>
             <template v-if="s.node.name == 'contacts'">
-              <v-container column fluid justify-center align-start wrap mt-5 pa-0>
-                <v-toolbar color="#1C1B20" flat fill-width depressed mt-5 style="color:whitesmoke; position: relative;">
-                  <v-layout row wrap fill-width justify-center>
-                    <v-toolbar-title class="title text-xs-header mr-5" v-text="item.contactSummary" />
-                    <v-toolbar-items>
-                       <v-btn>Contact Us</v-btn>
-                    </v-toolbar-items>
+              <v-container fluid fill-height pa-0 fill-width>
+                <v-layout column wrap fill-width align-start ma-0 pt-3 hidden-sm-and-down>
+                  <v-toolbar color="#1C1B20" flat fill-width depressed mt-5 style="color:whitesmoke; position: relative;">
+                    <v-layout xs12 row wrap fill-width justify-center>
+                      <v-toolbar-title class="title strong text-xs-header mr-5 pr-5" v-text="'Send email to us for further inquiry'" />
+                      <v-toolbar-items class="ml-5 pl-5">
+                        <v-btn :href="item.mailLink">Contact Us</v-btn>
+                      </v-toolbar-items>
+                    </v-layout>
+                  </v-toolbar>
+                  <v-layout row wrap fill-width align-center justify-center>
+                    <template v-for="(contact, i) in contactList">
+                      <v-avatar size="44px" :key="i" color="grey" class="mx-3 clickable" @click="goToLink(contact.node.value)">
+                        <v-img :src="contact.node.iconSrc" max-height="30" max-width="30"></v-img>
+                      </v-avatar>
+                    </template>
                   </v-layout>
-                </v-toolbar>
+                  <v-toolbar color="#1C1B20" flat fill-width depressed height="60" style="color:whitesmoke;">
+                    <v-layout xs12 row wrap fill-width justify-center>
+                      <v-toolbar-title class="body-2" v-text="'Created by Ordent'" />
+                    </v-layout>
+                  </v-toolbar>
+                </v-layout>
+                <v-layout column wrap fill-width fill-height align-start ma-0 pt-2 hidden-sm-and-up>
+                  <v-toolbar color="#1C1B20" flat depressed style="color:whitesmoke;" class="py-1">
+                    <v-layout xs12 column wrap fill-width justify-center>
+                      <v-toolbar-title class="subheading strong text-xs-center pb-2" v-text="'Send email to us for further inquiry'" />
+                      <v-toolbar-items class="justify-center pb-3">
+                        <v-btn :href="item.mailLink">Contact Us</v-btn>
+                      </v-toolbar-items>
+                    </v-layout>
+                  </v-toolbar>
+                  <v-layout row wrap fill-width align-center justify-center>
+                    <template v-for="(contact, i) in contactList">
+                      <v-avatar size="44px" :key="i" color="grey" class="mx-3 clickable" @click="goToLink(contact.node.value)">
+                        <v-img :src="contact.node.iconSrc" max-height="30" max-width="30"></v-img>
+                      </v-avatar>
+                    </template>
+                  </v-layout>
+                  <v-toolbar color="#1C1B20" flat fill-width depressed height="60" style="color:whitesmoke;">
+                    <v-layout xs12 row wrap fill-width justify-center>
+                      <v-toolbar-title class="caption" v-text="'Created by Ordent'" />
+                    </v-layout>
+                  </v-toolbar>
+                </v-layout>
               </v-container>
             </template>
           </v-layout>
@@ -361,6 +440,7 @@ query getPageData {
     useContacts
     contactSummary
     contactSectionId
+    mailLink
   },
   section: allSections(sortBy:"id", order:ASC) {
     edges {
@@ -397,6 +477,17 @@ query getPageData {
         imageMain
         name
         summary
+      }
+    }
+  },
+  contactList: allContactList(sortBy: "id", order:ASC) {
+    edges {
+      node {
+        id
+        title
+        iconSrc
+        type
+        value
       }
     }
   }
@@ -447,12 +538,14 @@ export default {
     productList() {
       return this.$page.productList.edges
     },
+    contactList() {
+      console.log(this.$page.contactList.edges)
+      return this.$page.contactList.edges
+    },
     sideMenu() {
       let sideMenu = []
       sideMenu.push({section_id: 0, name: 'Beranda'})
       sideMenu.push({section_id: 1, name: 'Tentang Kami'})
-
-      console.log(this.item)
 
       if (this.item.useProducts){
         sideMenu.push({section_id: this.item.productSectionId, name: 'Produk'})
@@ -472,6 +565,12 @@ export default {
     this.hammerjs = hammerjs
   },
   watch: {
+  },
+  methods: {
+    goToLink(urlLink) {
+      console.log(urlLink)
+      window.open(urlLink, '_blank')
+    }
   }
 }
 </script>
@@ -555,6 +654,10 @@ body {
 .product-detail {
   height: 100%;
   width: 100%
+}
+
+.clickable {
+  cursor: pointer;
 }
 
 </style>

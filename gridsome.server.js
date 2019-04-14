@@ -18,6 +18,7 @@ module.exports = function (api) {
     const ProfilePost = store.addContentType('ProfilePost')
     const ProductPost = store.addContentType('ProductPost')
     const ProductList = store.addContentType('ProductList')
+    const ContactList = store.addContentType('ContactList')
 
     const headers = {
       'Project-ID': projectId
@@ -28,6 +29,7 @@ module.exports = function (api) {
     let getProfilePostUrl = apiUrl + '/api/post/type/single/3'
     let getProductPostUrl = apiUrl + '/api/post/type/single/4'
     let getProductListUrl = apiUrl + '/api/product?page=1&limit=6'
+    let getContactListUrl = apiUrl + '/api/contact'
 
     try {
       let sectionId = 1
@@ -164,7 +166,8 @@ module.exports = function (api) {
             product_section_id: productSectionId,
             use_contacts: configData.use_contacts,
             contact_summary: 'For further inquiries, please drop us an email if you like!',
-            contact_section_id: contactSectionId
+            contact_section_id: contactSectionId,
+            mail_link: 'mailto:' + configData.email
           }
         })
       } else {
@@ -238,6 +241,49 @@ module.exports = function (api) {
         })
       }
     } catch(error){
+      console.log(error)
+    }
+
+    try {
+      let contactList = await axios.get(getContactListUrl, {headers: headers})
+      contactList = contactList.data.data
+      console.log(contactList)
+
+      if (contactList != null && contactList != undefined && contactList.length > 0){
+        contactList.forEach(contact => {
+          let iconSrc = './images/default-contact.png'
+          if (contact.type == 'facebook'){
+            iconSrc = './images/facebook-icon.png'
+          } else if (contact.type == 'instagram'){
+            iconSrc = './images/instagram-icon.png'
+          } else if (contact.type == 'linkedin'){
+            iconSrc = './images/linkedin-icon.png'
+          } else if (contact.type == 'twitter'){
+            iconSrc = './images/twitter-icon.png'
+          }
+          ContactList.addNode({
+            fields: {
+              title: 'Contact Data',
+              id: contact.id,
+              icon_src: iconSrc,
+              type: contact.type,
+              value: contact.value
+            }
+          })
+        })
+      } else {
+        ContactList.addNode({
+          fields: {
+            title: 'none',
+            icon_src: 'null',
+            id: 0,
+            type: 'null',
+            value: 'null'
+          }
+        })
+      }
+
+    } catch(error) {
       console.log(error)
     }
   })

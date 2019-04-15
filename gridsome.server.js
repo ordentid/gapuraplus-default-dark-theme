@@ -100,7 +100,7 @@ module.exports = function (api) {
                   id: product.id,
                   image_main: product.image_main != null ? product.image_main : 'null',
                   name: product.name,
-                  summary: product_summary
+                  summary: product.summary
                 }
               })
             });
@@ -244,7 +244,6 @@ module.exports = function (api) {
     try {
       let contactList = await axios.get(getContactListUrl, {headers: headers})
       contactList = contactList.data.data
-      console.log(contactList)
 
       if (contactList != null && contactList != undefined && contactList.length > 0){
         contactList.forEach(contact => {

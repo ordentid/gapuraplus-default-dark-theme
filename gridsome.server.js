@@ -98,7 +98,6 @@ module.exports = function (api) {
               ProductList.addNode({
                 fields: {
                   id: product.id,
-                  as_icon: product.as_icon,
                   image_main: product.image_main != null ? product.image_main : 'null',
                   name: product.name,
                   summary: product_summary
@@ -110,7 +109,6 @@ module.exports = function (api) {
               ProductList.addNode({
                 fields: {
                   id: i,
-                  as_icon: true,
                   image_main: './images/default-icon-' + i + '.png',
                   name: 'Default Product Item',
                   summary: 'Default Product item summary'
@@ -134,7 +132,6 @@ module.exports = function (api) {
         ProductList.addNode({
           fields: {
             id: 1,
-            as_icon: false,
             image_main: 'null',
             name: 'null',
             summary: 'null'
@@ -161,7 +158,7 @@ module.exports = function (api) {
           id: 1,
           fields: {
             use_icons: configData.use_icons,
-            content_title: configData.site_title,
+            site_title: configData.site_title,
             use_products: configData.use_products,
             product_section_id: productSectionId,
             use_contacts: configData.use_contacts,

@@ -39,7 +39,7 @@
             </v-btn>
           </template>
           <template v-else>
-            <v-toolbar-title class="title default-color mr-5" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: 0})">{{ item.contentTitle }}</v-toolbar-title>
+            <v-toolbar-title class="title default-color mr-5" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: 0})">{{ item.siteTitle }}</v-toolbar-title>
           </template>
           <v-btn flat depressed color="white" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: 1})" class="hidden-sm-and-down">
             TENTANG KAMI
@@ -75,7 +75,7 @@
             </v-btn>
           </template>
           <template v-else>
-            <v-toolbar-title class="title default-color" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: 0})">{{ item.contentTitle }}</v-toolbar-title>
+            <v-toolbar-title class="title default-color" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: 0})">{{ item.siteTitle }}</v-toolbar-title>
           </template>
         </v-layout>
       </v-toolbar>
@@ -145,23 +145,15 @@
                       v-bind:key="product.node.id">
                         <v-card tile flat color="#1C1B20" style="color: whitesmoke;">
                           <v-layout row wrap justify-center align-start fill-height>
-                            <template v-if="product.node.asIcon">
-                              <v-flex xs2>
-                                <v-img :src="product.node.imageMain" max-height="100px" max-width="100px"/>
-                              </v-flex>
-                              <v-flex xs7>
-                                <v-layout column wrap>
-                                  <span class="body-2 text-xs-left text-xs-middle font-weight-strong ml-2 mb-1">{{ product.node.name}}</span>
-                                  <span class="caption text-xs-left text-xs-middle ml-2">{{ product.node.summary }}</span>
-                                </v-layout>
-                              </v-flex>
-                            </template>
-                            <template v-else>
-                              <v-layout column fixed wrap width="50%">
-                                <span class="body-2 text-xs-left text-xs-middle font-weight-strong ml-3 mb-1">{{ product.node.name}}</span>
-                                <span class="caption text-xs-left text-xs-middle ml-3">{{ product.node.summary }}</span>
+                            <v-flex xs2>
+                              <v-img :src="product.node.imageMain" max-height="100px" max-width="100px"/>
+                            </v-flex>
+                            <v-flex xs7>
+                              <v-layout column wrap>
+                                <span class="body-2 text-xs-left text-xs-middle font-weight-strong ml-2 mb-1">{{ product.node.name}}</span>
+                                <span class="caption text-xs-left text-xs-middle ml-2">{{ product.node.summary }}</span>
                               </v-layout>
-                            </template>
+                            </v-flex>
                           </v-layout>
                         </v-card>
                     </v-flex>
@@ -180,22 +172,14 @@
                       v-bind:key="product.node.id">
                         <v-card tile flat color="#1C1B20" style="color: whitesmoke;" class="hidden-sm-and-up">
                           <v-layout column wrap justify-center align-start fill-height>
-                            <template v-if="product.node.asIcon">
-                              <v-flex xs12 class="layout fill-width">
-                                <v-img :src="product.node.imageMain" height="50px" width="50px"/>
-                              </v-flex>
-                              <v-flex xs12>
-                                <v-layout column wrap>
-                                  <span class="body-2 text-xs-center text-xs-middle font-weight-strong mt-2">{{ product.node.name}}</span>
-                                </v-layout>
-                              </v-flex>
-                            </template>
-                            <template v-else>
-                              <v-layout column fixed wrap>
-                                <span class="body-2 text-xs-center text-xs-middle font-weight-strong ml-3 mb-1">{{ product.node.name}}</span>
-                                <span class="caption text-xs-center text-xs-middle ml-3">{{ product.node.summary }}</span>
+                            <v-flex xs12 class="layout fill-width">
+                              <v-img :src="product.node.imageMain" height="50px" width="50px"/>
+                            </v-flex>
+                            <v-flex xs12>
+                              <v-layout column wrap>
+                                <span class="body-2 text-xs-center text-xs-middle font-weight-strong mt-2">{{ product.node.name}}</span>
                               </v-layout>
-                            </template>
+                            </v-flex>
                           </v-layout>
                         </v-card>
                     </v-flex>
@@ -314,23 +298,15 @@
                       v-bind:key="product.node.id">
                         <v-card tile flat color="#1C1B20" style="color: whitesmoke;">
                           <v-layout row wrap justify-center align-start fill-height>
-                            <template v-if="product.node.asIcon">
-                              <v-flex xs2>
-                                <v-img :src="product.node.imageMain" max-height="100px" max-width="100px"/>
-                              </v-flex>
-                              <v-flex xs7>
-                                <v-layout column wrap>
-                                  <span class="body-2 text-xs-left text-xs-middle font-weight-strong ml-2 mb-1">{{ product.node.name}}</span>
-                                  <span class="caption text-xs-left text-xs-middle ml-2">{{ product.node.summary }}</span>
-                                </v-layout>
-                              </v-flex>
-                            </template>
-                            <template v-else>
-                              <v-layout column fixed wrap width="50%">
-                                <span class="body-2 text-xs-left text-xs-middle font-weight-strong ml-3 mb-1">{{ product.node.name}}</span>
-                                <span class="caption text-xs-left text-xs-middle ml-3">{{ product.node.summary }}</span>
+                            <v-flex xs2>
+                              <v-img :src="product.node.imageMain" max-height="100px" max-width="100px"/>
+                            </v-flex>
+                            <v-flex xs7>
+                              <v-layout column wrap>
+                                <span class="body-2 text-xs-left text-xs-middle font-weight-strong ml-2 mb-1">{{ product.node.name}}</span>
+                                <span class="caption text-xs-left text-xs-middle ml-2">{{ product.node.summary }}</span>
                               </v-layout>
-                            </template>
+                            </v-flex>
                           </v-layout>
                         </v-card>
                     </v-flex>
@@ -349,22 +325,14 @@
                       v-bind:key="product.node.id">
                         <v-card tile flat color="#1C1B20" style="color: whitesmoke;" class="hidden-sm-and-up">
                           <v-layout column wrap justify-center align-start fill-height>
-                            <template v-if="product.node.asIcon">
-                              <v-flex xs12 class="layout fill-width">
-                                <v-img :src="product.node.imageMain" height="50px" width="50px"/>
-                              </v-flex>
-                              <v-flex xs12>
-                                <v-layout column wrap>
-                                  <span class="body-2 text-xs-center text-xs-middle font-weight-strong mt-2">{{ product.node.name}}</span>
-                                </v-layout>
-                              </v-flex>
-                            </template>
-                            <template v-else>
-                              <v-layout column fixed wrap>
-                                <span class="body-2 text-xs-center text-xs-middle font-weight-strong ml-3 mb-1">{{ product.node.name}}</span>
-                                <span class="caption text-xs-center text-xs-middle ml-3">{{ product.node.summary }}</span>
+                            <v-flex xs12 class="layout fill-width">
+                              <v-img :src="product.node.imageMain" height="50px" width="50px"/>
+                            </v-flex>
+                            <v-flex xs12>
+                              <v-layout column wrap>
+                                <span class="body-2 text-xs-center text-xs-middle font-weight-strong mt-2">{{ product.node.name}}</span>
                               </v-layout>
-                            </template>
+                            </v-flex>
                           </v-layout>
                         </v-card>
                     </v-flex>
@@ -434,7 +402,7 @@ query getPageData {
     title
     id
     useIcons
-    contentTitle
+    siteTitle
     useProducts
     productSectionId
     useContacts
@@ -473,7 +441,6 @@ query getPageData {
     edges {
       node {
         id
-        asIcon
         imageMain
         name
         summary

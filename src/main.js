@@ -16,6 +16,8 @@ export default function (Vue, { router, head, isClient }) {
     href: 'https://fonts.googleapis.com/icon?family=Material+Icons'
   })
 
+  console.log(head.meta)
+
   Vue.use(Vuetify, {
     theme: {
       primary: colors.blue.darken2,

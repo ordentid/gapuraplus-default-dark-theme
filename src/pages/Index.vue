@@ -434,7 +434,7 @@ import axios from 'axios'
 
 export default {
   metaInfo: {
-    title: process.env.SITE_TITLE,
+    title: process.env.GRIDSOME_SITE_TITLE,
     meta: [
       {name: 'author', content: 'John Doe'}
     ]

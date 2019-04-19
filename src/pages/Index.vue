@@ -564,7 +564,6 @@ export default {
       await this.loadProductListData(headers)
     },
     async loadProductListData(headers) {
-      console.log('called')
       let tmpProductList = []
       let productListUrl = process.env.GRIDSOME_API_URL + '/api/product?page=1&limit=6'
       let productList = await axios.get(productListUrl, {headers: headers})
@@ -580,7 +579,8 @@ export default {
           })
         });
       } else {
-        for (i = 0; i < 6; i++){
+        for (let i = 0; i < 6; i++){
+          console.log('default called')
           tmpProductList.push({
             id: i,
             imageMain: './images/default-icon-' + i + '.png',

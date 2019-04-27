@@ -30,7 +30,7 @@
       >
         <v-layout xs12 justify-center align-center>
           <v-toolbar-side-icon @click="drawer = !drawer" class="hover hidden-sm-and-up" style="color: whitesmoke;"/>
-          <template v-if="config.useIcons">
+          <template v-if="config.useHomeIcon">
             <v-btn
               icon
               @click.stop="miniVariant = !miniVariant"
@@ -39,9 +39,9 @@
             </v-btn>
           </template>
           <template v-else>
-            <v-toolbar-title class="title default-color mr-5" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: 0})">{{ config.siteTitle }}</v-toolbar-title>
+            <v-toolbar-title class="title default-color mr-5" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: config.homeSectionId})">{{ config.siteTitle }}</v-toolbar-title>
           </template>
-          <v-btn flat depressed color="white" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: 1})" class="hidden-sm-and-down">
+          <v-btn flat depressed color="white" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: config.profileSectionId})" class="hidden-sm-and-down">
             TENTANG KAMI
           </v-btn>
           <template v-if="config.useProducts">
@@ -82,13 +82,13 @@
         <ksvuefp-section
           v-for="(s,index) in sections"
           :section="s"
-          :key="s.node.id"
+          :key="s.id"
           :section-index="index"
         >
-          <template v-if="s.node.id % 2 == 1">
+          <template v-if="s.id % 2 == 1">
             <v-layout fluid fill-height fill-width ma-0 pt-5 odd-content>
               <template v-if="!isLoading">
-              <template v-if="s.node.name == 'home'">
+              <template v-if="s.name == 'home'">
                 <v-parallax
                   dark
                   :src="welcomePost.coverImage"
@@ -110,7 +110,7 @@
                     </v-layout>
                 </v-parallax>
               </template>
-              <template v-if="s.node.name == 'profile'">
+              <template v-if="s.name == 'profile'">
                 <v-layout row class="hidden-sm-and-down">
                   <v-layout column wrap justify-left align-left pl-4 pt-5>
                     <span class="display-3 font-weight-strong mb-5">{{ profilePost.title}}</span>
@@ -134,7 +134,7 @@
                   </v-layout>
                 </v-layout>
               </template>
-              <template v-if="s.node.name == 'products' && config.useProducts">
+              <template v-if="s.name == 'products' && config.useProducts">
                 <v-layout column fluid justify-center class="hidden-sm-and-down">
                   <span class="display-1 text-xs-center font-weight-strong pt-4">{{ productPost.title}}</span>
                   <span class="body-1 text-xs-center pt-4 mb-3" v-html="productPost.content"></span>
@@ -189,7 +189,7 @@
                   </v-container>
                 </v-layout>
               </template>
-              <template v-if="s.node.name == 'contacts'">
+              <template v-if="s.name == 'contacts'">
                 <v-container fluid fill-height pa-0 fill-width>
                   <v-layout column wrap fill-width align-start ma-0 pt-3 hidden-sm-and-down>
                     <v-toolbar color="#1C1B20" flat fill-width depressed mt-5 style="color:whitesmoke; position: relative;">
@@ -243,7 +243,7 @@
           <template v-else>
             <v-layout fluid fill-height fill-width ma-0 pt-5 even-content>
               <template v-if="!isLoading">
-              <template v-if="s.node.name == 'home'">
+              <template v-if="s.name == 'home'">
                 <v-parallax
                   dark
                   :src="welcomePost.coverImage"
@@ -265,7 +265,7 @@
                     </v-layout>
                 </v-parallax>
               </template>
-              <template v-if="s.node.name == 'profile'">
+              <template v-if="s.name == 'profile'">
                 <v-layout row class="hidden-sm-and-down">
                   <v-layout column wrap justify-left align-left pl-4 pt-5>
                     <span class="display-3 font-weight-strong mb-5">{{ profilePost.title}}</span>
@@ -289,7 +289,7 @@
                   </v-layout>
                 </v-layout>
               </template>
-              <template v-if="s.node.name == 'products' && config.useProducts">
+              <template v-if="s.name == 'products' && config.useProducts">
                 <v-layout column fluid justify-center class="hidden-sm-and-down">
                   <span class="display-1 text-xs-center font-weight-strong pt-4">{{ productPost.title}}</span>
                   <span class="body-1 text-xs-center pt-4 mb-3" v-html="productPost.content"></span>
@@ -344,7 +344,7 @@
                   </v-container>
                 </v-layout>
               </template>
-              <template v-if="s.node.name == 'contacts'">
+              <template v-if="s.name == 'contacts'">
                 <v-container fluid fill-height pa-0 fill-width>
                   <v-layout column wrap fill-width align-start ma-0 pt-3 hidden-sm-and-down>
                     <v-toolbar color="#1C1B20" flat fill-width depressed mt-5 style="color:whitesmoke; position: relative;">
@@ -401,32 +401,6 @@
   </v-flex>
 </template>
 
-<page-query>
-query getConfigData {
-  config: config(id:"1") {
-    title
-    id
-    useIcons
-    siteTitle
-    useProducts
-    productSectionId
-    useContacts
-    contactSummary
-    contactSectionId
-    mailLink
-  },
-  sections: allSections(sortBy:"id", order:ASC) {
-    edges {
-      node {
-        id
-        title
-        name
-      }
-    }
-  }
-}
-</page-query>
-
 <script>
 import Logo from '~/components/Logo.vue'
 import VuetifyLogo from '~/components/VuetifyLogo.vue'
@@ -442,26 +416,6 @@ export default {
   computed: {
     currentIndex() {
       return this.$ksvuefp.currentIndex
-    },
-    config() {
-      return this.$page.config
-    },
-    sections() {
-      return this.$page.sections.edges
-    },
-    sideMenu() {
-      let sideMenu = []
-      sideMenu.push({section_id: 0, name: 'Beranda'})
-      sideMenu.push({section_id: 1, name: 'Tentang Kami'})
-
-      if (this.config.useProducts){
-        sideMenu.push({section_id: this.config.productSectionId, name: 'Produk'})
-      }
-      if (this.config.useContacts){
-        sideMenu.push({section_id: this.config.contactSectionId, name: 'Hubungi Kami'})
-      }
-
-      return sideMenu      
     }
   },
   data() {
@@ -503,7 +457,10 @@ export default {
         coverImage: 'null'
       },
       contactList: [],
-      productList: []
+      productList: [],
+      config: {},
+      sections: [],
+      sideMenu: []
     }
   },
   async mounted() {
@@ -513,11 +470,92 @@ export default {
     this.velocity = Velocity
     this.hammerjs = hammerjs
 
+    await this.loadConfig(this.headers)
     await this.loadWelcomePost(this.headers)
   },
   methods: {
     goToLink(urlLink) {
       window.open(urlLink, '_blank')
+    },
+    async loadConfig(headers) {
+      let apiUrl = process.env.GRIDSOME_API_URL + '/api/config'
+      let apiResponse = await axios.get(apiUrl, {headers: headers})
+      let sections = []
+      let sideMenu = []
+
+      apiResponse = apiResponse.data.data
+      if (apiResponse != null) {
+        let sectionId = 0
+        let homeSectionId = 0
+        let profileSectionId = 0
+        let productSectionId = 0
+        let contactSectionId = 0
+
+        if (apiResponse.use_home) {
+          homeSectionId = sectionId 
+
+          sideMenu.push({section_id: homeSectionId, name: apiResponse.home_menu})
+          sections.push({
+            title: 'Home Section',
+            id: homeSectionId + 1,
+            name: 'home'
+          })
+          sectionId++
+        }
+
+        if (apiResponse.use_profiles) {
+          profileSectionId = sectionId
+
+          sideMenu.push({section_id: profileSectionId, name: apiResponse.profile_menu})
+          sections.push({
+            title: 'Profile Section',
+            id: profileSectionId + 1,
+            name: 'profile'
+          })
+          sectionId++
+        }
+
+        if (apiResponse.use_products){
+          productSectionId = sectionId
+
+          sideMenu.push({section_id: productSectionId, name: apiResponse.product_menu})
+          sections.push({
+            title: 'Product Section',
+            id: productSectionId + 1,
+            name: 'products'
+          })
+          sectionId++
+        }
+
+        if (apiResponse.use_contacts){
+          contactSectionId = sectionId
+
+          sideMenu.push({section_id: contactSectionId, name: apiResponse.contact_menu})
+          sections.push({
+            title: 'Contact Section',
+            id: contactSectionId + 1,
+            name: 'contacts'
+          })
+          sectionId++
+        }
+
+        this.sections = sections
+        this.sideMenu = sideMenu
+        this.config = {
+          title: 'User Config',
+          id: 1,
+          useProducts: apiResponse.use_products,
+          productSectionId: productSectionId,
+          useContacts: apiResponse.use_contacts,
+          contactSectionId: contactSectionId,
+          useHome: apiResponse.use_home,
+          useHomeIcon: apiResponse.use_home_icon,
+          homeSectionId: homeSectionId,
+          useProfiles: apiResponse.use_profiles,
+          profileSectionId: profileSectionId,
+          mailLink: 'mailto:' + apiResponse.email
+        }
+      }
     },
     async loadContactData(headers) {
       let apiUrl = process.env.GRIDSOME_API_URL + '/api/contact'
@@ -543,8 +581,9 @@ export default {
             tmpContactList.push(contact)
 
             this.contactList = tmpContactList
-            this.isLoading = false
         });
+
+        this.isLoading = false
       })
     },
     async loadProductData(headers) {

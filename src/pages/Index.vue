@@ -136,10 +136,20 @@
               </template>
               <template v-if="s.name == 'products' && config.useProducts">
                 <v-layout column fluid justify-center class="hidden-sm-and-down">
-                  <span class="display-1 text-xs-center font-weight-strong pt-4">{{ productPost.title}}</span>
-                  <span class="body-1 text-xs-center pt-4 mb-3" v-html="productPost.content"></span>
+                  <v-layout fill-width ma-0 style="height: 10%;">
+                    <v-parallax
+                      dark
+                      :src="productPost.coverImage"
+                      class="cover-image-full hidden-sm-and-down"
+                      height="100%">
+                        <v-layout column wrap justify-center align-center>
+                          <span class="display-1 text-xs-center font-weight-strong pt-4">{{ productPost.title}}</span>
+                          <span class="body-1 text-xs-center pt-4 mb-3" v-html="productPost.content"></span>
+                        </v-layout>
+                    </v-parallax>
+                  </v-layout>
                   <v-container fluid layout align-center>
-                    <v-layout row wrap product-detail justify-center fill-height fill-width align-start pl-3 style="overflow: hidden;">
+                    <v-layout row wrap product-detail justify-center fill-width align-start pl-3 style="overflow: hidden; height: 90%;">
                       <v-flex
                         xs3 md3 lg3 sm6 fill-width pb-2 pt-2 px-2 mx-1
                         v-for="product in productList"
@@ -163,10 +173,20 @@
                   </v-container>
                 </v-layout>
                 <v-layout column fluid justify-center class="hidden-sm-and-up">
-                  <span class="display-1 text-xs-center font-weight-strong pt-2">{{ productPost.title}}</span>
-                  <span class="body-1 text-xs-center pt-2 mb-2" v-html="productPost.content"></span>
+                  <v-layout fill-width ma-0 style="height: 10%;">
+                    <v-parallax
+                      dark
+                      :src="productPost.coverImage"
+                      class="cover-image-full hidden-sm-and-up"
+                      height="100%">
+                        <v-layout column wrap justify-center align-center>
+                          <span class="display-1 text-xs-center font-weight-strong pt-4">{{ productPost.title}}</span>
+                          <span class="body-1 text-xs-center pt-4 mb-3" v-html="productPost.content"></span>
+                        </v-layout>
+                    </v-parallax>
+                  </v-layout>
                   <v-container fluid layout align-center pa-0 ma-0>
-                    <v-layout row wrap product-detail justify-center fill-height fill-width align-start pl-0 style="overflow: hidden;">
+                    <v-layout row wrap product-detail justify-center fill-width align-start pl-0 style="overflow: hidden; height: 90%;">
                       <v-flex
                         xs3 md3 lg3 sm6 fill-width pb-2 pt-2 px-2 mx-1
                         v-for="product in productList"
@@ -291,10 +311,20 @@
               </template>
               <template v-if="s.name == 'products' && config.useProducts">
                 <v-layout column fluid justify-center class="hidden-sm-and-down">
-                  <span class="display-1 text-xs-center font-weight-strong pt-4">{{ productPost.title}}</span>
-                  <span class="body-1 text-xs-center pt-4 mb-3" v-html="productPost.content"></span>
+                  <v-layout fill-width ma-0 style="height: 10%;">
+                    <v-parallax
+                      dark
+                      :src="productPost.coverImage"
+                      class="cover-image-full hidden-sm-and-down"
+                      height="100%">
+                        <v-layout column wrap justify-center align-center>
+                          <span class="display-1 text-xs-center font-weight-strong pt-4">{{ productPost.title}}</span>
+                          <span class="body-1 text-xs-center pt-4 mb-3" v-html="productPost.content"></span>
+                        </v-layout>
+                    </v-parallax>
+                  </v-layout>
                   <v-container fluid layout align-center>
-                    <v-layout row wrap product-detail justify-center fill-height fill-width align-start pl-3 style="overflow: hidden;">
+                    <v-layout row wrap product-detail justify-center fill-width align-start pl-3 style="overflow: hidden; height: 90%;">
                       <v-flex
                         xs3 md3 lg3 sm6 fill-width pb-2 pt-2 px-2 mx-1
                         v-for="product in productList"
@@ -318,10 +348,20 @@
                   </v-container>
                 </v-layout>
                 <v-layout column fluid justify-center class="hidden-sm-and-up">
-                  <span class="display-1 text-xs-center font-weight-strong pt-2">{{ productPost.title}}</span>
-                  <span class="body-1 text-xs-center pt-2 mb-2" v-html="productPost.content"></span>
+                  <v-layout fill-width ma-0 style="height: 10%;">
+                    <v-parallax
+                      dark
+                      :src="productPost.coverImage"
+                      class="cover-image-full hidden-sm-and-up"
+                      height="100%">
+                        <v-layout column wrap justify-center align-center>
+                          <span class="display-1 text-xs-center font-weight-strong pt-4">{{ productPost.title}}</span>
+                          <span class="body-1 text-xs-center pt-4 mb-3" v-html="productPost.content"></span>
+                        </v-layout>
+                    </v-parallax>
+                  </v-layout>
                   <v-container fluid layout align-center pa-0 ma-0>
-                    <v-layout row wrap product-detail justify-center fill-height fill-width align-start pl-0 style="overflow: hidden;">
+                    <v-layout row wrap product-detail justify-center fill-width align-start pl-0 style="overflow: hidden; height: 90%;">
                       <v-flex
                         xs3 md3 lg3 sm6 fill-width pb-2 pt-2 px-2 mx-1
                         v-for="product in productList"
@@ -589,7 +629,7 @@ export default {
     async loadProductData(headers) {
       let productPostUrl = process.env.GRIDSOME_API_URL + '/api/post/type/single/4'
       let productPost = await axios.get(productPostUrl, {headers: headers})
-      productPost = productPost.data
+      productPost = productPost.data.data
 
       if (productPost != null && productPost != undefined && productPost.id != null){
         this.productPost = {

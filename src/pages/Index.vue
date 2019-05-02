@@ -605,24 +605,29 @@ export default {
       .then((response) => {
         let contactList = response.data.data
         contactList.forEach(contact => {
-            let iconSrc = './images/default-contact.png'
+            if (contact.type == 'social_media'){
+              let contactView = {}
+              let contactValue = contact.value
+              let iconSrc = './images/default-contact.png'
 
-            if (contact.type == 'facebook'){
-              iconSrc = './images/facebook-icon.png'
-            } else if (contact.type == 'instagram'){
-              iconSrc = './images/instagram-icon.png'
-            } else if (contact.type == 'linkedin'){
-              iconSrc = './images/linkedin-icon.png'
-            } else if (contact.type == 'twitter'){
-              iconSrc = './images/twitter-icon.png'
+              if (contactValue.name == 'facebook'){
+                iconSrc = './images/facebook-icon.png'
+              } else if (contactValue.name == 'instagram'){
+                iconSrc = './images/instagram-icon.png'
+              } else if (contactValue.name == 'linkedin'){
+                iconSrc = './images/linkedin-icon.png'
+              } else if (contactValue.name == 'twitter'){
+                iconSrc = './images/twitter-icon.png'
+              }
+
+              contactView.name = contactValue.name
+              contactView.value = contactValue.value
+              contactView.iconSrc = iconSrc
+              tmpContactList.push(contactView)
             }
-
-            contact.iconSrc = iconSrc
-            tmpContactList.push(contact)
-
-            this.contactList = tmpContactList
         });
 
+        this.contactList = tmpContactList
         this.isLoading = false
       })
     },

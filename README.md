@@ -30,85 +30,29 @@ Gapura+ utilizes Environment Variables to define some default settings like API 
 
 Client Side Env is used inside `.vue` files or `main.js` file, and Server Side Env is used inside `gridsome.server.js`
 
-### 5. Gapura+ Server Side Config
+### 5. Gapura+ Site Config
+Site Config is used to determine what modules is accessible for user,and config is set up inside Gapura+ Dashboard. Current config consist of:
+- Home Module
+  - use_home: determine if user is using Home Page or not
+  - use_home_icon: true if user set icon as button instead of text
+  - home_menu: title for home button
+  - home_icon: icon of home button. URL string of icon location
+- Blog Module
+  - use_articles: determine if user is adding Article Page or not
+  - article_menu: title for article page button
+- Profile Menu
+  - use_profiles: determine if user is adding Profile Page or not
+  - profile_menu: title for profile menu button
+- Product Menu
+  - use_products: determine if user is adding Product Page or not
+  - product_menu: title for product menu button
+- Contact Menu
+  - use_contacts: determine if user is adding Contact Page or not
+  - contact_menu: title for contact menu button
 
-Gapura+ config for default theme consist of:
-```
-{
-  site_title: string, // Title for the site
-  home_title: string, // Title for page main menu. if use_icons value is false, it consist of text, and locations of icons if use_icons is true
-  use_icons: boolean, // Flags for indicating if home_title value is an image source, or text only
-  use_profiles: boolean, // Flags for indicating that user is adding profile page for the themes
-  use_products: boolean, // Flags for indicating that user is adding product page for the themes
-  use_articles: boolean, // Flags for indicating that user is adding articles or blog page for the themes
-  use_contacts: boolean, // Flags for indicating that user is adding contact page for the themes
-  profile_menu: string, // Text for profile menu button
-  product_menu: string, // Text for product menu button
-  article_menu: string, // Text for article menu button
-  contact_menu: string, // Text for contact menu button
-  email: string // email for contact us button
-}
-```
+These config can differs from theme to theme, e.g in Default Theme, the Blog Module is not supported, so the config value might be null.
 
-You can get this config by calling making request to `gapuraplus-public-api`.
-```
-{
-  method: GET
-  api_url: /api/config
-  headers: {
-    Project-ID: insert-project-id-value
-  }
-}
-```
-
-To use these config inside `.vue` files, you need to add the config to Gridsome's Embedded GraphQL. You can add the content to GraphQL like this: 
-
-```
-api.loadSource(async store => {
-  const Config = store.addContentType('Config')
-  
-  Config.addNode({
-    title: 'User Config',
-    id: 1,
-    fields: {
-      use_icons: configData.use_icons,
-      site_title: configData.site_title,
-      use_products: configData.use_products,
-      product_section_id: productSectionId,
-      use_contacts: configData.use_contacts,
-      contact_summary: 'For further inquiries, please drop us an email if you like!',
-      contact_section_id: contactSectionId,
-      mail_link: 'mailto:' + configData.email
-    }
-  })
-})
-```
-
-`id` field is quite mandatory, since we need the `id` when we make query to GraphQL. Since the config is only one per theme, we put default `id` with value `1`.
-
-And when you want to access this config in `.vue` files, you need to add `<page-query>` inside the files. The `<page-query>` looks similar like this:
-
-```
-  <page-query>
-    query getConfigData {
-      config: config(id:"1") {
-        title
-        id
-        useIcons
-        siteTitle
-        useProducts
-        productSectionId
-        useContacts
-        contactSummary
-        contactSectionId
-        mailLink
-      }
-    }
-  </page-query>
-```
-After adding the `<page-query>`, you can access the config with `this.$page.config`
-
-### 5. Data API
+### 6. Data API
 
 Even though the page was generated statically, we need to fetch the data dynamically via api. Since i think there's currently no way for gridsome dynamically rehydrates the page from client, only possible from build. 
 
@@ -118,13 +62,14 @@ You can get the data by making requests to API like this:
   method: GET,
   url: API_URL,
   headers: {
-    Project-ID:
+    Project-ID: GRIDSOME_PROJECT_ID
   }
 }
 ```
 
 and currently available API_URL value was this:
 ```
+Site Config: /api/config
 Post List: /api/post
 Welcome Post: /api/post/type/single/2
 Profile Post: /api/post/type/single/3

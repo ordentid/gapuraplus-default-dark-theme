@@ -517,7 +517,7 @@ export default {
     let params = this.$route.query
     if (params.preview){
       this.headers.Preview = params.preview
-      await this.loadConfig(this.headers, params.section)
+      await this.loadConfig(this.headers, params.type)
     } else {
       await this.loadConfig(this.headers)
       await this.loadWelcomePost(this.headers)
@@ -536,7 +536,7 @@ export default {
       apiResponse = apiResponse.data.data
       if (apiResponse != null) {
         if (headers.Preview) {
-          if (section == 'home'){
+          if (section == 2){
             sideMenu.push({section_id: 0, name: apiResponse.home_menu})
             sections.push({
               title: 'Home Section',
@@ -559,7 +559,7 @@ export default {
               homeSectionId: 0,
               useProfiles: false,
             }
-          } else if (section == 'profile') {
+          } else if (section == 3) {
             sideMenu.push({section_id: 0, name: apiResponse.profile_menu})
             sections.push({
               title: 'Profile Section',
@@ -582,7 +582,7 @@ export default {
               profileSectionId: 0,
               profileMenu: apiResponse.profile_menu
             }
-          } else if(section == 'product') {
+          } else if(section == 4) {
             sideMenu.push({section_id: 0, name: apiResponse.product_menu})
             sections.push({
               title: 'Product Section',

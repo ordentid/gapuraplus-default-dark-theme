@@ -30,28 +30,32 @@
       >
         <v-layout xs12 justify-center align-center>
           <v-toolbar-side-icon @click="drawer = !drawer" class="hover hidden-sm-and-up" style="color: whitesmoke;"/>
-          <template v-if="config.useHomeIcon">
-            <v-btn
-              icon
-              @click.stop="miniVariant = !miniVariant"
-            >
-              <v-icon>{{ `chevron_${miniVariant ? 'right' : 'left'}` }}</v-icon>
+          <template v-if="config.useHome">
+            <template v-if="config.useHomeIcon">
+              <v-btn
+                icon
+                @click.stop="miniVariant = !miniVariant"
+              >
+                <v-icon>{{ `chevron_${miniVariant ? 'right' : 'left'}` }}</v-icon>
+              </v-btn>
+            </template>
+            <template v-else>
+              <v-toolbar-title class="title default-color mr-5" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: config.homeSectionId})">{{ config.homeMenu }}</v-toolbar-title>
+            </template>
+          </template>
+          <template v-if="config.useProfiles">
+            <v-btn flat depressed color="white" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: config.profileSectionId})" class="hidden-sm-and-down">
+              {{ config.profileMenu }}
             </v-btn>
           </template>
-          <template v-else>
-            <v-toolbar-title class="title default-color mr-5" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: config.homeSectionId})">{{ config.siteTitle }}</v-toolbar-title>
-          </template>
-          <v-btn flat depressed color="white" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: config.profileSectionId})" class="hidden-sm-and-down">
-            TENTANG KAMI
-          </v-btn>
           <template v-if="config.useProducts">
             <v-btn flat depressed color="white" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: config.productSectionId})" class="hidden-sm-and-down">
-              PRODUK
+              {{ config.productMenu }}
             </v-btn>
           </template>
            <template v-if="config.useContacts">
             <v-btn flat depressed color="white" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: config.contactSectionId})" class="hidden-sm-and-down">
-              HUBUNGI KAMI
+              {{ config.contactMenu }}
             </v-btn>
           </template>
         </v-layout>
@@ -95,7 +99,7 @@
                   class="cover-image-full hidden-sm-and-down"
                   height="100%">
                     <v-layout column wrap justify-center align-center>
-                      <span class="display-3 font-weight-strong mb-5">{{ welcomePost.title}}</span>
+                      <span class="display-3 font-weight-strong mb-5 text-xs-center">{{ welcomePost.title}}</span>
                       <span class="subheading text-xs-center" v-html="welcomePost.content" />
                     </v-layout>
                 </v-parallax>
@@ -105,7 +109,7 @@
                   class="cover-image-full hidden-sm-and-up"
                   height="100%">
                     <v-layout column wrap justify-center align-center>
-                      <span class="display-1 font-weight-strong mb-5">{{ welcomePost.title}}</span>
+                      <span class="display-1 font-weight-strong mb-5 text-xs-center text-xs-center">{{ welcomePost.title}}</span>
                       <span class="subheading text-xs-center" v-html="welcomePost.content" />
                     </v-layout>
                 </v-parallax>
@@ -113,7 +117,7 @@
               <template v-if="s.name == 'profile'">
                 <v-layout row class="hidden-sm-and-down">
                   <v-layout column wrap justify-left align-left pl-4 pt-5>
-                    <span class="display-3 font-weight-strong mb-5">{{ profilePost.title}}</span>
+                    <span class="display-3 font-weight-strong mb-5 text-xs-center">{{ profilePost.title}}</span>
                     <span class="subheading" v-html="profilePost.content" />
                   </v-layout>
                   <v-parallax
@@ -129,7 +133,7 @@
                     class="cover-image-not-full-mobile"
                     height="200px"/>
                   <v-layout column wrap justify-center px-0 pt-0>
-                    <span class="display-1 font-weight-strong mb-5">{{ profilePost.title}}</span>
+                    <span class="display-1 font-weight-strong mb-5 text-xs-center">{{ profilePost.title}}</span>
                     <span class="subheading" v-html="profilePost.content" />
                   </v-layout>
                 </v-layout>
@@ -510,14 +514,20 @@ export default {
     this.velocity = Velocity
     this.hammerjs = hammerjs
 
-    await this.loadConfig(this.headers)
-    await this.loadWelcomePost(this.headers)
+    let params = this.$route.query
+    if (params.preview){
+      this.headers.Preview = params.preview
+      await this.loadConfig(this.headers, params.section)
+    } else {
+      await this.loadConfig(this.headers)
+      await this.loadWelcomePost(this.headers)
+    }
   },
   methods: {
     goToLink(urlLink) {
       window.open(urlLink, '_blank')
     },
-    async loadConfig(headers) {
+    async loadConfig(headers, section = null) {
       let apiUrl = process.env.GRIDSOME_API_URL + '/api/config'
       let apiResponse = await axios.get(apiUrl, {headers: headers})
       let sections = []
@@ -525,75 +535,152 @@ export default {
 
       apiResponse = apiResponse.data.data
       if (apiResponse != null) {
-        let sectionId = 0
-        let homeSectionId = 0
-        let profileSectionId = 0
-        let productSectionId = 0
-        let contactSectionId = 0
+        if (headers.Preview) {
+          if (section == 'home'){
+            sideMenu.push({section_id: 0, name: apiResponse.home_menu})
+            sections.push({
+              title: 'Home Section',
+              id: 1,
+              name: 'home'
+            })
 
-        if (apiResponse.use_home) {
-          homeSectionId = sectionId 
+            await this.loadWelcomePost(headers)
 
-          sideMenu.push({section_id: homeSectionId, name: apiResponse.home_menu})
-          sections.push({
-            title: 'Home Section',
-            id: homeSectionId + 1,
-            name: 'home'
-          })
-          sectionId++
-        }
+            this.sections = sections
+            this.sideMenu = sideMenu
+            this.config = {
+              title: 'User Config',
+              id: 1,
+              useProducts: false,
+              useContacts: false,
+              useHome: true,
+              useHomeIcon: false,
+              homeMenu: apiResponse.home_menu,
+              homeSectionId: 0,
+              useProfiles: false,
+            }
+          } else if (section == 'profile') {
+            sideMenu.push({section_id: 0, name: apiResponse.profile_menu})
+            sections.push({
+              title: 'Profile Section',
+              id: 1,
+              name: 'profile'
+            })
 
-        if (apiResponse.use_profiles) {
-          profileSectionId = sectionId
+            await this.loadProfilePost(headers)
 
-          sideMenu.push({section_id: profileSectionId, name: apiResponse.profile_menu})
-          sections.push({
-            title: 'Profile Section',
-            id: profileSectionId + 1,
-            name: 'profile'
-          })
-          sectionId++
-        }
+            this.sections = sections
+            this.sideMenu = sideMenu
+            this.config = {
+              title: 'User Config',
+              id: 1,
+              useProducts: false,
+              useContacts: false,
+              useHome: false,
+              useHomeIcon: false,
+              useProfiles: false,
+              profileSectionId: 0,
+              profileMenu: apiResponse.profile_menu
+            }
+          } else if(section == 'product') {
+            sideMenu.push({section_id: 0, name: apiResponse.product_menu})
+            sections.push({
+              title: 'Product Section',
+              id: 1,
+              name: 'product'
+            })
 
-        if (apiResponse.use_products){
-          productSectionId = sectionId
+            await this.loadProductData(headers)
 
-          sideMenu.push({section_id: productSectionId, name: apiResponse.product_menu})
-          sections.push({
-            title: 'Product Section',
-            id: productSectionId + 1,
-            name: 'products'
-          })
-          sectionId++
-        }
+            this.sections = sections
+            this.sideMenu = sideMenu
+            this.config = {
+              title: 'User Config',
+              id: 1,
+              useProducts: false,
+              productMenu: apiResponse.product_menu,
+              productSectionId: 0,
+              useContacts: false,
+              useHome: false,
+              useHomeIcon: false,
+              useProfiles: false
+            }
+          }
+        } else {
+          let sectionId = 0
+          let homeSectionId = 0
+          let profileSectionId = 0
+          let productSectionId = 0
+          let contactSectionId = 0
 
-        if (apiResponse.use_contacts){
-          contactSectionId = sectionId
+          if (apiResponse.use_home) {
+            homeSectionId = sectionId 
 
-          sideMenu.push({section_id: contactSectionId, name: apiResponse.contact_menu})
-          sections.push({
-            title: 'Contact Section',
-            id: contactSectionId + 1,
-            name: 'contacts'
-          })
-          sectionId++
-        }
+            sideMenu.push({section_id: homeSectionId, name: apiResponse.home_menu})
+            sections.push({
+              title: 'Home Section',
+              id: homeSectionId + 1,
+              name: 'home'
+            })
+            sectionId++
+          }
 
-        this.sections = sections
-        this.sideMenu = sideMenu
-        this.config = {
-          title: 'User Config',
-          id: 1,
-          useProducts: apiResponse.use_products,
-          productSectionId: productSectionId,
-          useContacts: apiResponse.use_contacts,
-          contactSectionId: contactSectionId,
-          useHome: apiResponse.use_home,
-          useHomeIcon: apiResponse.use_home_icon,
-          homeSectionId: homeSectionId,
-          useProfiles: apiResponse.use_profiles,
-          profileSectionId: profileSectionId,
-          mailLink: 'mailto:' + apiResponse.email
+          if (apiResponse.use_profiles) {
+            profileSectionId = sectionId
+
+            sideMenu.push({section_id: profileSectionId, name: apiResponse.profile_menu})
+            sections.push({
+              title: 'Profile Section',
+              id: profileSectionId + 1,
+              name: 'profile'
+            })
+            sectionId++
+          }
+
+          if (apiResponse.use_products){
+            productSectionId = sectionId
+
+            sideMenu.push({section_id: productSectionId, name: apiResponse.product_menu})
+            sections.push({
+              title: 'Product Section',
+              id: productSectionId + 1,
+              name: 'products'
+            })
+            sectionId++
+          }
+
+          if (apiResponse.use_contacts){
+            contactSectionId = sectionId
+
+            sideMenu.push({section_id: contactSectionId, name: apiResponse.contact_menu})
+            sections.push({
+              title: 'Contact Section',
+              id: contactSectionId + 1,
+              name: 'contacts'
+            })
+            sectionId++
+          }
+
+          this.sections = sections
+          this.sideMenu = sideMenu
+          this.config = {
+            title: 'User Config',
+            id: 1,
+            useProducts: apiResponse.use_products,
+            productMenu: apiResponse.product_menu,
+            productSectionId: productSectionId,
+            useContacts: apiResponse.use_contacts,
+            contactMenu: apiResponse.contact_menu,
+            contactSectionId: contactSectionId,
+            useHome: apiResponse.use_home,
+            useHomeIcon: apiResponse.use_home_icon,
+            homeMenu: apiResponse.home_menu,
+            homeSectionId: homeSectionId,
+            useProfiles: apiResponse.use_profiles,
+            profileMenu: apiResponse.profile_menu,
+            profileSectionId: profileSectionId,
+            mailLink: 'mailto:' + apiResponse.email
+          }
         }
       }
     },
@@ -720,7 +807,6 @@ export default {
   },
   watch: {
     currentIndex: async function(newIndex, oldIndex) {
-      console.log(oldIndex)
       if (newIndex == 0){
         this.isLoading = true
         await this.loadWelcomePost(this.headers)

@@ -1,18 +1,13 @@
 <template>
-  <v-flex
-    xs12
-    pa-0
-    ma-0
-  >
-  <div id="app">
-    <ksvuefp :options="options" :sections="sections">
+  <v-layout column wrap fill-height fill-width pa-0 style="max-width: 100%;">
+    <ksvuefp :options="options" :sections="contentSections" style="height: 100%; width: 100%;">
        <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" :clipped="clipped" fixed app dark floating class="hidden-sm-and-up" width="225px">
          <v-layout column wrap fill-height align-end justify-center>
           <v-list>
-            <div v-for="(menu, i) in sideMenu" :key="i">
+            <div v-for="(menu, i) in contentSections" :key="i">
               <v-list-tile @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: menu.section_id})" @click="drawer = false" class="my-3">
                   <v-list-tile-content>
-                      <v-list-tile-title v-text="menu.name" justify-end/>
+                      <v-list-tile-title v-text="menu.section_menu" justify-end/>
                   </v-list-tile-content>
               </v-list-tile>
             </div>
@@ -25,13 +20,13 @@
         fixed
         app
         flat
-        height='70%'
         class="hidden-sm-and-down pa-0"
+        style="height: 10%;"
       >
-        <v-layout xs12 justify-center align-center>
+        <v-layout row wrap justify-center align-center style="height: 100%;">
           <v-toolbar-side-icon @click="drawer = !drawer" class="hover hidden-sm-and-up" style="color: whitesmoke;"/>
-          <template v-if="config.useHome">
-            <template v-if="config.useHomeIcon">
+          <template v-if="config.use_home">
+            <template v-if="homeSection.use_icon">
               <v-btn
                 icon
                 @click.stop="miniVariant = !miniVariant"
@@ -40,22 +35,14 @@
               </v-btn>
             </template>
             <template v-else>
-              <v-toolbar-title class="title default-color mr-5" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: config.homeSectionId})">{{ config.homeMenu }}</v-toolbar-title>
+              <v-toolbar-title class="title default-color text-xs-center mr-5" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: homeSection.section_id})">{{ homeSection.section_menu }}</v-toolbar-title>
             </template>
           </template>
-          <template v-if="config.useProfiles">
-            <v-btn flat depressed color="white" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: config.profileSectionId})" class="hidden-sm-and-down">
-              {{ config.profileMenu }}
-            </v-btn>
-          </template>
-          <template v-if="config.useProducts">
-            <v-btn flat depressed color="white" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: config.productSectionId})" class="hidden-sm-and-down">
-              {{ config.productMenu }}
-            </v-btn>
-          </template>
-           <template v-if="config.useContacts">
-            <v-btn flat depressed color="white" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: config.contactSectionId})" class="hidden-sm-and-down">
-              {{ config.contactMenu }}
+          <template
+            v-for="toolbarSection in menuSections"
+          >
+            <v-btn flat :key="toolbarSection.id" depressed color="white" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: toolbarSection.section_id})" class="hidden-sm-and-down body-2 font-weight-regular">
+              {{ toolbarSection.section_menu }}
             </v-btn>
           </template>
         </v-layout>
@@ -66,11 +53,12 @@
         fixed
         app
         flat
-        class="hidden-sm-and-up"
+        class="hidden-sm-and-up pa-0"
+        style="height: 10%;"
       >
         <v-layout xs12 justify-left align-center>
-          <v-toolbar-side-icon @click="drawer = !drawer" class="hover hidden-sm-and-up" style="color: whitesmoke;"/>
-          <template v-if="config.useIcons">
+          <v-toolbar-side-icon @click="drawer = !drawer" class="hover hidden-sm-and-up toolbar"/>
+          <template v-if="config.use_icons">
             <v-btn
               icon
               @click.stop="miniVariant = !miniVariant"
@@ -79,372 +67,193 @@
             </v-btn>
           </template>
           <template v-else>
-            <v-toolbar-title class="title default-color" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: 0})">{{ config.siteTitle }}</v-toolbar-title>
+            <v-toolbar-title class="title default-color" @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: homeSection.section_id})">{{ homeSection.section_menu }}</v-toolbar-title>
           </template>
         </v-layout>
       </v-toolbar>
-        <ksvuefp-section
-          v-for="(s,index) in sections"
-          :section="s"
-          :key="s.id"
-          :section-index="index"
-        >
-          <template v-if="s.id % 2 == 1">
-            <v-layout fluid fill-height fill-width ma-0 pt-5 odd-content>
-              <template v-if="!isLoading">
-              <template v-if="s.name == 'home'">
-                <v-parallax
-                  dark
-                  :src="welcomePost.coverImage"
-                  class="cover-image-full hidden-sm-and-down"
-                  height="100%">
-                    <v-layout column wrap justify-center align-center>
-                      <span class="display-3 font-weight-strong mb-5 text-xs-center">{{ welcomePost.title}}</span>
-                      <span class="subheading text-xs-center" v-html="welcomePost.content" />
-                    </v-layout>
-                </v-parallax>
-                <v-parallax
-                  dark
-                  :src="welcomePost.coverImage"
-                  class="cover-image-full hidden-sm-and-up"
-                  height="100%">
-                    <v-layout column wrap justify-center align-center>
-                      <span class="display-1 font-weight-strong mb-5 text-xs-center text-xs-center">{{ welcomePost.title}}</span>
-                      <span class="subheading text-xs-center" v-html="welcomePost.content" />
-                    </v-layout>
-                </v-parallax>
-              </template>
-              <template v-if="s.name == 'profile'">
-                <v-layout row class="hidden-sm-and-down">
-                  <v-layout column wrap justify-left align-left pl-4 pt-5>
-                    <span class="display-3 font-weight-strong mb-5 text-xs-center">{{ profilePost.title}}</span>
-                    <span class="subheading" v-html="profilePost.content" />
+      <ksvuefp-section
+        v-for="section in contentSections"
+        :section="section"
+        :key="section.id"
+        :section-index="section.section_id"
+        class="content-wrapper"
+      >
+        <template v-if="section.section_name == 'home'">
+          <v-layout v-if="!pageLoading" fill-width ma-0 pa-0 hidden-sm-and-down odd-content section-content>
+              <v-parallax
+                dark
+                :src="welcomePost.cover_image"
+                class="cover-image-full"
+                style="height: 100%;">
+                  <v-layout column wrap justify-center align-center>
+                    <span class="display-3 font-weight-strong mb-3 text-xs-center">{{ welcomePost.title}}</span>
+                    <span class="subheading text-xs-center" v-html="welcomePost.html_content" />
                   </v-layout>
-                  <v-parallax
-                    dark
-                    :src="profilePost.coverImage"
-                    class="cover-image-not-full"
-                    height="100%" />
-                </v-layout>
-                <v-layout column class="hidden-sm-and-up">
-                  <v-parallax
-                    dark
-                    :src="profilePost.coverImage"
-                    class="cover-image-not-full-mobile"
-                    height="200px"/>
-                  <v-layout column wrap justify-center px-0 pt-0>
-                    <span class="display-1 font-weight-strong mb-5 text-xs-center">{{ profilePost.title}}</span>
-                    <span class="subheading" v-html="profilePost.content" />
-                  </v-layout>
-                </v-layout>
-              </template>
-              <template v-if="s.name == 'products' && config.useProducts">
-                <v-layout column fluid justify-center class="hidden-sm-and-down">
-                  <v-layout fill-width ma-0 style="height: 10%;">
-                    <v-parallax
-                      dark
-                      :src="productPost.coverImage"
-                      class="cover-image-full hidden-sm-and-down"
-                      height="100%">
-                        <v-layout column wrap justify-center align-center>
-                          <span class="display-1 text-xs-center font-weight-strong pt-4">{{ productPost.title}}</span>
-                          <span class="body-1 text-xs-center pt-4 mb-3" v-html="productPost.content"></span>
-                        </v-layout>
-                    </v-parallax>
-                  </v-layout>
-                  <v-container fluid layout align-center>
-                    <v-layout row wrap product-detail justify-center fill-width align-start pl-3 style="overflow: hidden; height: 90%;">
-                      <v-flex
-                        xs3 md3 lg3 sm6 fill-width pb-2 pt-2 px-2 mx-1
-                        v-for="product in productList"
-                        :items="product"
-                        v-bind:key="product.id">
-                          <v-card tile flat color="#1C1B20" style="color: whitesmoke;">
-                            <v-layout row wrap justify-center align-start fill-height>
-                              <v-flex xs2>
-                                <v-img :src="product.imageMain" max-height="100px" max-width="100px"/>
-                              </v-flex>
-                              <v-flex xs7>
-                                <v-layout column wrap>
-                                  <span class="body-2 text-xs-left text-xs-middle font-weight-strong ml-2 mb-1">{{ product.name}}</span>
-                                  <span class="caption text-xs-left text-xs-middle ml-2">{{ product.summary }}</span>
-                                </v-layout>
-                              </v-flex>
-                            </v-layout>
-                          </v-card>
-                      </v-flex>
-                    </v-layout>
-                  </v-container>
-                </v-layout>
-                <v-layout column fluid justify-center class="hidden-sm-and-up">
-                  <v-layout fill-width ma-0 style="height: 10%;">
-                    <v-parallax
-                      dark
-                      :src="productPost.coverImage"
-                      class="cover-image-full hidden-sm-and-up"
-                      height="100%">
-                        <v-layout column wrap justify-center align-center>
-                          <span class="display-1 text-xs-center font-weight-strong pt-4">{{ productPost.title}}</span>
-                          <span class="body-1 text-xs-center pt-4 mb-3" v-html="productPost.content"></span>
-                        </v-layout>
-                    </v-parallax>
-                  </v-layout>
-                  <v-container fluid layout align-center pa-0 ma-0>
-                    <v-layout row wrap product-detail justify-center fill-width align-start pl-0 style="overflow: hidden; height: 90%;">
-                      <v-flex
-                        xs3 md3 lg3 sm6 fill-width pb-2 pt-2 px-2 mx-1
-                        v-for="product in productList"
-                        :items="product"
-                        v-bind:key="product.id">
-                          <v-card tile flat color="#1C1B20" style="color: whitesmoke;" class="hidden-sm-and-up">
-                            <v-layout column wrap justify-center align-start fill-height>
-                              <v-flex xs12 class="layout fill-width">
-                                <v-img :src="product.imageMain" height="50px" width="50px"/>
-                              </v-flex>
-                              <v-flex xs12>
-                                <v-layout column wrap>
-                                  <span class="body-2 text-xs-center text-xs-middle font-weight-strong mt-2">{{ product.name}}</span>
-                                </v-layout>
-                              </v-flex>
-                            </v-layout>
-                          </v-card>
-                      </v-flex>
-                    </v-layout>
-                  </v-container>
-                </v-layout>
-              </template>
-              <template v-if="s.name == 'contacts'">
-                <v-container fluid fill-height pa-0 fill-width>
-                  <v-layout column wrap fill-width align-start ma-0 pt-3 hidden-sm-and-down>
-                    <v-toolbar color="#1C1B20" flat fill-width depressed mt-5 style="color:whitesmoke; position: relative;">
-                      <v-layout xs12 row wrap fill-width justify-center>
-                        <v-toolbar-title class="title strong text-xs-header mr-5 pr-5" v-text="'Send email to us for further inquiry'" />
-                        <v-toolbar-items class="ml-5 pl-5">
-                          <v-btn :href="config.mailLink">Contact Us</v-btn>
-                        </v-toolbar-items>
-                      </v-layout>
-                    </v-toolbar>
-                    <v-layout row wrap fill-width align-center justify-center>
-                      <template v-for="(contact, i) in contactList">
-                        <v-avatar size="44px" :key="i" color="grey" class="mx-3 clickable" @click="goToLink(contact.value)">
-                          <v-img :src="contact.iconSrc" max-height="30" max-width="30"></v-img>
-                        </v-avatar>
-                      </template>
-                    </v-layout>
-                    <v-toolbar color="#1C1B20" flat fill-width depressed height="60" style="color:whitesmoke;">
-                      <v-layout xs12 row wrap fill-width justify-center>
-                        <v-toolbar-title class="body-2" v-text="'Created by Ordent'" />
-                      </v-layout>
-                    </v-toolbar>
-                  </v-layout>
-                  <v-layout column wrap fill-width fill-height align-start ma-0 pt-2 hidden-sm-and-up>
-                    <v-toolbar color="#1C1B20" flat depressed style="color:whitesmoke;" class="py-1">
-                      <v-layout xs12 column wrap fill-width justify-center>
-                        <v-toolbar-title class="subheading strong text-xs-center pb-2" v-text="'Send email to us for further inquiry'" />
-                        <v-toolbar-items class="justify-center pb-3">
-                          <v-btn :href="config.mailLink">Contact Us</v-btn>
-                        </v-toolbar-items>
-                      </v-layout>
-                    </v-toolbar>
-                    <v-layout row wrap fill-width align-center justify-center>
-                      <template v-for="(contact, i) in contactList">
-                        <v-avatar size="44px" :key="i" color="grey" class="mx-3 clickable" @click="goToLink(contact.value)">
-                          <v-img :src="contact.iconSrc" max-height="30" max-width="30"></v-img>
-                        </v-avatar>
-                      </template>
-                    </v-layout>
-                    <v-toolbar color="#1C1B20" flat fill-width depressed height="60" style="color:whitesmoke;">
-                      <v-layout xs12 row wrap fill-width justify-center>
-                        <v-toolbar-title class="caption" v-text="'Created by Ordent'" />
-                      </v-layout>
-                    </v-toolbar>
-                  </v-layout>
-                </v-container>
-              </template>
-              </template>
+              </v-parallax>
           </v-layout>
-          </template>
-          <template v-else>
-            <v-layout fluid fill-height fill-width ma-0 pt-5 even-content>
-              <template v-if="!isLoading">
-              <template v-if="s.name == 'home'">
-                <v-parallax
-                  dark
-                  :src="welcomePost.coverImage"
-                  class="cover-image-full hidden-sm-and-down"
-                  height="100%">
-                    <v-layout column wrap justify-center align-center>
-                      <span class="display-3 font-weight-strong mb-5">{{ welcomePost.title}}</span>
-                      <span class="subheading text-xs-center" v-html="welcomePost.content" />
-                    </v-layout>
-                </v-parallax>
-                <v-parallax
-                  dark
-                  :src="welcomePost.coverImage"
-                  class="cover-image-full hidden-sm-and-up"
-                  height="100%">
-                    <v-layout column wrap justify-center align-center>
-                      <span class="display-1 font-weight-strong mb-5">{{ welcomePost.title}}</span>
-                      <span class="subheading text-xs-center" v-html="welcomePost.content" />
-                    </v-layout>
-                </v-parallax>
-              </template>
-              <template v-if="s.name == 'profile'">
-                <v-layout row class="hidden-sm-and-down">
-                  <v-layout column wrap justify-left align-left pl-4 pt-5>
-                    <span class="display-3 font-weight-strong mb-5">{{ profilePost.title}}</span>
-                    <span class="subheading" v-html="profilePost.content" />
+          <v-layout v-if="!pageLoading" fluid fill-height fill-width ma-0 hidden-sm-and-up pa-0 odd-content section-content-mobile>
+              <v-parallax
+                dark
+                :src="welcomePost.cover_image"
+                class="cover-image-full"
+                style="height: 100%;">
+                  <v-layout column wrap justify-center align-center>
+                    <span class="display-1 font-weight-strong mb-3 text-xs-center text-xs-center">{{ welcomePost.title}}</span>
+                    <span class="subheading text-xs-center" v-html="welcomePost.html_content" />
                   </v-layout>
-                  <v-parallax
-                    dark
-                    :src="profilePost.coverImage"
-                    class="cover-image-not-full"
-                    height="100%" />
-                </v-layout>
-                <v-layout column class="hidden-sm-and-up">
-                  <v-parallax
-                    dark
-                    :src="profilePost.coverImage"
-                    class="cover-image-not-full-mobile"
-                    height="200px"/>
-                  <v-layout column wrap justify-center px-0 pt-0>
-                    <span class="display-1 font-weight-strong mb-5">{{ profilePost.title}}</span>
-                    <span class="subheading" v-html="profilePost.content" />
+              </v-parallax>
+          </v-layout>
+        </template>
+        <template v-if="section.section_name == 'profile'">
+          <v-layout v-if="!pageLoading" row fill-width ma-0 pa-0 hidden-sm-and-down even-content section-content>
+            <v-layout column wrap justify-left align-left pl-4 pt-5 style="width: 65%;">
+              <span class="display-3 font-weight-strong mb-5">{{ profilePost.title}}</span>
+              <span class="subheading" v-html="profilePost.html_content" />
+            </v-layout>
+            <v-parallax
+              :src="profilePost.coverImage"
+              class="cover-image-not-full odd-content"
+              style="height: 100%; width: 35%;"
+            >
+            </v-parallax>
+          </v-layout>
+          <v-layout v-if="!pageLoading" column fill-height fill-width ma-0 hidden-sm-and-up pa-0 even-content section-content-mobile>
+            <v-layout column wrap justify-left align-left pl-4 pt-3 style="height: 45%;">
+              <span class="display-1 font-weight-strong mb-5">{{ profilePost.title}}</span>
+              <span class="subheading" v-html="profilePost.html_content" />
+            </v-layout>
+            <v-parallax
+              :src="profilePost.coverImage"
+              class="cover-image-not-full odd-content"
+              style="height: 55%; width: 100%;"
+            >
+            </v-parallax>
+          </v-layout>
+        </template>
+        <template v-if="section.section_name == 'product'">
+          <v-layout v-if="!pageLoading" column fill-width ma-0 pa-0 hidden-sm-and-down odd-content section-content>
+            <v-layout fill-width ma-0 style="height: 50%;">
+              <v-parallax
+                dark
+                :src="productPost.coverImage"
+                class="cover-image-full"
+                height="100%">
+                  <v-layout column wrap justify-center align-center>
+                    <span class="display-1 text-xs-center font-weight-strong pt-4">{{ productPost.title}}</span>
+                    <span class="body-1 text-xs-center pt-4 mb-3" v-html="productPost.html_content"></span>
                   </v-layout>
-                </v-layout>
-              </template>
-              <template v-if="s.name == 'products' && config.useProducts">
-                <v-layout column fluid justify-center class="hidden-sm-and-down">
-                  <v-layout fill-width ma-0 style="height: 10%;">
-                    <v-parallax
-                      dark
-                      :src="productPost.coverImage"
-                      class="cover-image-full hidden-sm-and-down"
-                      height="100%">
-                        <v-layout column wrap justify-center align-center>
-                          <span class="display-1 text-xs-center font-weight-strong pt-4">{{ productPost.title}}</span>
-                          <span class="body-1 text-xs-center pt-4 mb-3" v-html="productPost.content"></span>
+              </v-parallax>
+            </v-layout>
+            <v-carousel hide-delimiters dark style="height: 50%; width: 100%;" @click.native="carouselClick">
+              <v-carousel-item>
+                <v-layout row wrap product-detail justify-center fill-width fill-height align-center pa-0>
+                  <v-flex
+                    xs5
+                    v-for="product in productList"
+                    :items="product"
+                    v-bind:key="product.id">
+                      <v-card tile flat color="#1C1B20" style="color: whitesmoke; height: 100%; width: 90%;">
+                        <v-layout row wrap align-start justify-end style="height: 100%;">
+                          <v-img :src="product.image_main" max-height="50%" max-width="50%" contain/>
+                          <v-layout column wrap style="width: 60%; height: 100%;">
+                            <span class="body-2 text-xs-left font-weight-strong ml-2 mb-1">{{ product.name}}</span>
+                            <span class="caption text-xs-left ml-2">{{ product.summary }}</span>
+                          </v-layout>
                         </v-layout>
-                    </v-parallax>
-                  </v-layout>
-                  <v-container fluid layout align-center>
-                    <v-layout row wrap product-detail justify-center fill-width align-start pl-3 style="overflow: hidden; height: 90%;">
-                      <v-flex
-                        xs3 md3 lg3 sm6 fill-width pb-2 pt-2 px-2 mx-1
-                        v-for="product in productList"
-                        :items="product"
-                        v-bind:key="product.id">
-                          <v-card tile flat color="#1C1B20" style="color: whitesmoke;">
-                            <v-layout row wrap justify-center align-start fill-height>
-                              <v-flex xs2>
-                                <v-img :src="product.imageMain" max-height="100px" max-width="100px"/>
-                              </v-flex>
-                              <v-flex xs7>
-                                <v-layout column wrap>
-                                  <span class="body-2 text-xs-left text-xs-middle font-weight-strong ml-2 mb-1">{{ product.name}}</span>
-                                  <span class="caption text-xs-left text-xs-middle ml-2">{{ product.summary }}</span>
-                                </v-layout>
-                              </v-flex>
-                            </v-layout>
-                          </v-card>
-                      </v-flex>
-                    </v-layout>
-                  </v-container>
+                      </v-card>
+                  </v-flex>
                 </v-layout>
-                <v-layout column fluid justify-center class="hidden-sm-and-up">
-                  <v-layout fill-width ma-0 style="height: 10%;">
-                    <v-parallax
-                      dark
-                      :src="productPost.coverImage"
-                      class="cover-image-full hidden-sm-and-up"
-                      height="100%">
-                        <v-layout column wrap justify-center align-center>
-                          <span class="display-1 text-xs-center font-weight-strong pt-4">{{ productPost.title}}</span>
-                          <span class="body-1 text-xs-center pt-4 mb-3" v-html="productPost.content"></span>
+              </v-carousel-item>
+            </v-carousel>
+          </v-layout>
+          <v-layout v-if="!pageLoading" column fill-height fill-width ma-0 hidden-sm-and-up pa-0 odd-content section-content-mobile>
+            <v-layout fill-width ma-0 style="height: 50%;">
+              <v-parallax
+                dark
+                :src="productPost.coverImage"
+                class="cover-image-full"
+                height="100%">
+                  <v-layout column wrap justify-center align-center>
+                    <span class="display-1 text-xs-center font-weight-strong pt-4">{{ productPost.title}}</span>
+                    <span class="body-1 text-xs-center pt-4 mb-3" v-html="productPost.html_content"></span>
+                  </v-layout>
+              </v-parallax>
+            </v-layout>
+            <v-carousel hide-delimiters dark style="height: 50%; width: 100%;" @click.native="carouselClick">
+              <v-carousel-item>
+                <v-layout column wrap product-detail justify-center fill-width fill-height align-center pa-0>
+                  <v-flex
+                    xs6
+                    v-for="product in productList"
+                    :items="product"
+                    v-bind:key="product.id"
+                    style="width: 80%; height: 100%;">
+                      <v-card tile flat color="#1C1B20" style="color: whitesmoke; height: 100%; width: 100;" class="justify-center align-center">
+                        <v-layout row wrap align-center justify-center style="height: 100%;">
+                          <v-img :src="product.image_main" max-height="50%" max-width="50%" contain/>
+                          <v-layout column wrap>
+                            <span class="body-2 text-xs-left font-weight-strong ml-2 mb-1">{{ product.name}}</span>
+                            <span class="caption text-xs-left ml-2">{{ product.summary }}</span>
+                          </v-layout>
                         </v-layout>
-                    </v-parallax>
-                  </v-layout>
-                  <v-container fluid layout align-center pa-0 ma-0>
-                    <v-layout row wrap product-detail justify-center fill-width align-start pl-0 style="overflow: hidden; height: 90%;">
-                      <v-flex
-                        xs3 md3 lg3 sm6 fill-width pb-2 pt-2 px-2 mx-1
-                        v-for="product in productList"
-                        :items="product"
-                        v-bind:key="product.id">
-                          <v-card tile flat color="#1C1B20" style="color: whitesmoke;" class="hidden-sm-and-up">
-                            <v-layout column wrap justify-center align-start fill-height>
-                              <v-flex xs12 class="layout fill-width">
-                                <v-img :src="product.imageMain" height="50px" width="50px"/>
-                              </v-flex>
-                              <v-flex xs12>
-                                <v-layout column wrap>
-                                  <span class="body-2 text-xs-center text-xs-middle font-weight-strong mt-2">{{ product.name}}</span>
-                                </v-layout>
-                              </v-flex>
-                            </v-layout>
-                          </v-card>
-                      </v-flex>
-                    </v-layout>
-                  </v-container>
+                      </v-card>
+                  </v-flex>
                 </v-layout>
-              </template>
-              <template v-if="s.name == 'contacts'">
-                <v-container fluid fill-height pa-0 fill-width>
-                  <v-layout column wrap fill-width align-start ma-0 pt-3 hidden-sm-and-down>
-                    <v-toolbar color="#1C1B20" flat fill-width depressed mt-5 style="color:whitesmoke; position: relative;">
-                      <v-layout xs12 row wrap fill-width justify-center>
-                        <v-toolbar-title class="title strong text-xs-header mr-5 pr-5" v-text="'Send email to us for further inquiry'" />
-                        <v-toolbar-items class="ml-5 pl-5">
-                          <v-btn :href="config.mailLink">Contact Us</v-btn>
-                        </v-toolbar-items>
-                      </v-layout>
-                    </v-toolbar>
-                    <v-layout row wrap fill-width align-center justify-center>
-                      <template v-for="(contact, i) in contactList">
-                        <v-avatar size="44px" :key="i" color="grey" class="mx-3 clickable" @click="goToLink(contact.value)">
-                          <v-img :src="contact.iconSrc" max-height="30" max-width="30"></v-img>
-                        </v-avatar>
-                      </template>
-                    </v-layout>
-                    <v-toolbar color="#1C1B20" flat fill-width depressed height="60" style="color:whitesmoke;">
-                      <v-layout xs12 row wrap fill-width justify-center>
-                        <v-toolbar-title class="body-2" v-text="'Created by Ordent'" />
-                      </v-layout>
-                    </v-toolbar>
-                  </v-layout>
-                  <v-layout column wrap fill-width fill-height align-start ma-0 pt-2 hidden-sm-and-up>
-                    <v-toolbar color="#1C1B20" flat depressed style="color:whitesmoke;" class="py-1">
-                      <v-layout xs12 column wrap fill-width justify-center>
-                        <v-toolbar-title class="subheading strong text-xs-center pb-2" v-text="'Send email to us for further inquiry'" />
-                        <v-toolbar-items class="justify-center pb-3">
-                          <v-btn :href="config.mailLink">Contact Us</v-btn>
-                        </v-toolbar-items>
-                      </v-layout>
-                    </v-toolbar>
-                    <v-layout row wrap fill-width align-center justify-center>
-                      <template v-for="(contact, i) in contactList">
-                        <v-avatar size="44px" :key="i" color="grey" class="mx-3 clickable" @click="goToLink(contact.value)">
-                          <v-img :src="contact.iconSrc" max-height="30" max-width="30"></v-img>
-                        </v-avatar>
-                      </template>
-                    </v-layout>
-                    <v-toolbar color="#1C1B20" flat fill-width depressed height="60" style="color:whitesmoke;">
-                      <v-layout xs12 row wrap fill-width justify-center>
-                        <v-toolbar-title class="caption" v-text="'Created by Ordent'" />
-                      </v-layout>
-                    </v-toolbar>
-                  </v-layout>
-                </v-container>
-              </template>
+              </v-carousel-item>
+            </v-carousel>
+          </v-layout>
+        </template>
+        <template v-if="section.section_name == 'contact'">
+          <v-layout v-if="!pageLoading" column fill-width ma-0 pa-0 hidden-sm-and-down odd-content section-content>
+            <v-toolbar color="#1C1B20" flat fill-width depressed style="color:whitesmoke; position: relative; height: 5%;">
+              <v-layout row wrap fill-width fill-height justify-center align-center>
+                <v-toolbar-title class="title strong text-xs-center mr-5 pr-5 align-center" v-text="'Send email to us for further inquiry'" />
+                <v-toolbar-items class="ml-5 pl-5">
+                  <v-btn :href="config.mailLink" style="height: 80%">Contact Us</v-btn>
+                </v-toolbar-items>
+              </v-layout>
+            </v-toolbar>
+            <v-layout row wrap fill-width align-center justify-center> 
+              <template v-for="(contact, i) in contactList">
+                <v-avatar size="44px" :key="i" color="grey" class="mx-3 clickable" @click="goToLink(contact.value.value)">
+                  <v-img :src="contact.value.icon_src" max-height="30" max-width="30"></v-img>
+                </v-avatar>
               </template>
             </v-layout>
-          </template>
-        </ksvuefp-section>
+            <v-toolbar color="#1C1B20" flat fill-width depressed style="color:whitesmoke; height: 5%;">
+              <v-layout row wrap fill-width justify-center>
+                <v-toolbar-title class="body-2" v-text="'Created by Ordent'" />
+              </v-layout>
+            </v-toolbar>
+          </v-layout>
+          <v-layout v-if="!pageLoading" column fill-height fill-width ma-0 hidden-sm-and-up pa-0 even-content section-content-mobile>
+            <v-toolbar color="#1C1B20" flat depressed style="color:whitesmoke;height: 15%;" class="py-1">
+              <v-layout column wrap fill-width justify-center>
+                <v-toolbar-title class="subheading strong text-xs-center pb-2" v-text="'Send email to us for further inquiry'" />
+                <v-toolbar-items class="justify-center pb-3">
+                  <v-btn :href="config.mailLink">Contact Us</v-btn>
+                </v-toolbar-items>
+              </v-layout>
+            </v-toolbar>
+            <v-layout row wrap fill-width align-center justify-center>
+              <template v-for="(contact, i) in contactList">
+                <v-avatar size="44px" :key="i" color="grey" class="mx-3 clickable" @click="goToLink(contact.value.value)">
+                  <v-img :src="contact.value.icon_src" max-height="30" max-width="30"></v-img>
+                </v-avatar>
+              </template>
+            </v-layout>
+            <v-toolbar color="#1C1B20" flat fill-width depressed style="color:whitesmoke; height: 5%;">
+              <v-layout xs12 row wrap fill-width justify-center>
+                <v-toolbar-title class="caption" v-text="'Created by Ordent'" />
+              </v-layout>
+            </v-toolbar>
+          </v-layout>
+        </template>
+      </ksvuefp-section>
     </ksvuefp>
-  </div>
-  </v-flex>
+  </v-layout>
 </template>
-
+            
 <script>
 import Logo from '~/components/Logo.vue'
 import VuetifyLogo from '~/components/VuetifyLogo.vue'
@@ -460,6 +269,47 @@ export default {
   computed: {
     currentIndex() {
       return this.$ksvuefp.currentIndex
+    },
+    meta() {
+      return this.$store.state.meta
+    },
+    config() {
+      return this.$store.state.config
+    },
+    welcomePost() {
+      return this.$store.state.welcomePost
+    },
+    profilePost() {
+      return this.$store.state.profilePost
+    },
+    productPost() {
+      return this.$store.state.productPost
+    },
+    productList() {
+      return this.$store.state.productList
+    },
+    contactList() {
+      let socialMedia = Object.assign([], this.$store.state.contactList)
+
+      socialMedia.forEach(element => {
+        switch(element.value.name) {
+          case 'facebook':
+            element.value.icon_src = './images/facebook-icon.png'
+            break
+          case 'instagram':
+            element.value.icon_src = './images/instagram-icon.png'
+            break
+          case 'twitter':
+            element.value.icon_src = './images/twitter-icon.png'
+            break
+          case 'linkedin':
+            element.value.icon_src = './images/linkedin-icon.png'
+            break
+          default:
+            console.log('No Data')
+        }
+      })
+      return socialMedia
     }
   },
   data() {
@@ -481,30 +331,13 @@ export default {
       clipped: false,
       drawer: false,
       miniVariant: false,
-      isLoading: true,
-      productPost: {
-        id: 1,
-        title: 'Default Product',
-        content: '<p>Hello World!</p><p>Some initial <strong>default</strong> product</p>',
-        coverImage: 'null'
-      },
-      welcomePost: {
-        id: 1,
-        title: 'Default Home',
-        content: '<p>Hello World!</p><p>Some initial <strong>Home</strong> text</p>',
-        coverImage: 'null'
-      },
-      profilePost: {
-        id: 1,
-        title: 'Default Profile',
-        content: '<p>Hello World!</p><p>Some initial <strong>default</strong> profile</p>',
-        coverImage: 'null'
-      },
-      contactList: [],
-      productList: [],
-      config: {},
-      sections: [],
-      sideMenu: []
+      pageLoading: true,
+      carouselLoading: true,
+      homeSection: {},
+      menuSections: [],
+      contentSections: [],
+      page: 1,
+      limit: 2
     }
   },
   async mounted() {
@@ -517,308 +350,211 @@ export default {
     let params = this.$route.query
     if (params.preview){
       this.headers.Preview = params.preview
-      await this.loadConfig(this.headers, params.type)
+      await this.loadSections(this.headers, params.type)
     } else {
-      await this.loadConfig(this.headers)
-      await this.loadWelcomePost(this.headers)
+      await this.loadSections(this.headers)
+      await this.fetchWelcomePost(this.headers)
     }
   },
   methods: {
     goToLink(urlLink) {
       window.open(urlLink, '_blank')
     },
-    async loadConfig(headers, section = null) {
-      let apiUrl = process.env.GRIDSOME_API_URL + '/api/config'
-      let apiResponse = await axios.get(apiUrl, {headers: headers})
+    async loadSections(headers, section = null) {
       let sections = []
-      let sideMenu = []
+      let contentSections = []
+      await this.$store.dispatch('fetchConfig', headers)
 
-      apiResponse = apiResponse.data.data
-      if (apiResponse != null) {
-        if (headers.Preview) {
-          if (section == 2){
-            sideMenu.push({section_id: 0, name: apiResponse.home_menu})
-            sections.push({
-              title: 'Home Section',
-              id: 1,
-              name: 'home'
-            })
-
-            await this.loadWelcomePost(headers)
-
-            this.sections = sections
-            this.sideMenu = sideMenu
-            this.config = {
-              title: 'User Config',
-              id: 1,
-              useProducts: false,
-              useContacts: false,
-              useHome: true,
-              useHomeIcon: false,
-              homeMenu: apiResponse.home_menu,
-              homeSectionId: 0,
-              useProfiles: false,
-            }
-          } else if (section == 3) {
-            sideMenu.push({section_id: 0, name: apiResponse.profile_menu})
-            sections.push({
-              title: 'Profile Section',
-              id: 1,
-              name: 'profile'
-            })
-
-            await this.loadProfilePost(headers)
-
-            this.sections = sections
-            this.sideMenu = sideMenu
-            this.config = {
-              title: 'User Config',
-              id: 1,
-              useProducts: false,
-              useContacts: false,
-              useHome: false,
-              useHomeIcon: false,
-              useProfiles: false,
-              profileSectionId: 0,
-              profileMenu: apiResponse.profile_menu
-            }
-          } else if(section == 4) {
-            sideMenu.push({section_id: 0, name: apiResponse.product_menu})
-            sections.push({
-              title: 'Product Section',
-              id: 1,
-              name: 'product'
-            })
-
-            await this.loadProductData(headers)
-
-            this.sections = sections
-            this.sideMenu = sideMenu
-            this.config = {
-              title: 'User Config',
-              id: 1,
-              useProducts: false,
-              productMenu: apiResponse.product_menu,
-              productSectionId: 0,
-              useContacts: false,
-              useHome: false,
-              useHomeIcon: false,
-              useProfiles: false
-            }
+      if (headers.Preview){
+        if (section == 2){
+          this.homeSection = {
+            id: 1,
+            section_name: 'home',
+            section_menu: config.home_menu,
+            section_id: sectionId,
+            use_icon: config.use_home_icon,
+            icon_url: config.home_icon
           }
-        } else {
-          let sectionId = 0
-          let homeSectionId = 0
-          let profileSectionId = 0
-          let productSectionId = 0
-          let contactSectionId = 0
+          contentSections.push(this.homeSection)
 
-          if (apiResponse.use_home) {
-            homeSectionId = sectionId 
+          await this.fetchWelcomePost(headers)
 
-            sideMenu.push({section_id: homeSectionId, name: apiResponse.home_menu})
-            sections.push({
-              title: 'Home Section',
-              id: homeSectionId + 1,
-              name: 'home'
-            })
-            sectionId++
-          }
-
-          if (apiResponse.use_profiles) {
-            profileSectionId = sectionId
-
-            sideMenu.push({section_id: profileSectionId, name: apiResponse.profile_menu})
-            sections.push({
-              title: 'Profile Section',
-              id: profileSectionId + 1,
-              name: 'profile'
-            })
-            sectionId++
-          }
-
-          if (apiResponse.use_products){
-            productSectionId = sectionId
-
-            sideMenu.push({section_id: productSectionId, name: apiResponse.product_menu})
-            sections.push({
-              title: 'Product Section',
-              id: productSectionId + 1,
-              name: 'products'
-            })
-            sectionId++
-          }
-
-          if (apiResponse.use_contacts){
-            contactSectionId = sectionId
-
-            sideMenu.push({section_id: contactSectionId, name: apiResponse.contact_menu})
-            sections.push({
-              title: 'Contact Section',
-              id: contactSectionId + 1,
-              name: 'contacts'
-            })
-            sectionId++
-          }
-
-          this.sections = sections
-          this.sideMenu = sideMenu
           this.config = {
             title: 'User Config',
             id: 1,
-            useProducts: apiResponse.use_products,
-            productMenu: apiResponse.product_menu,
-            productSectionId: productSectionId,
-            useContacts: apiResponse.use_contacts,
-            contactMenu: apiResponse.contact_menu,
-            contactSectionId: contactSectionId,
-            useHome: apiResponse.use_home,
-            useHomeIcon: apiResponse.use_home_icon,
-            homeMenu: apiResponse.home_menu,
-            homeSectionId: homeSectionId,
-            useProfiles: apiResponse.use_profiles,
-            profileMenu: apiResponse.profile_menu,
-            profileSectionId: profileSectionId,
-            mailLink: 'mailto:' + apiResponse.email
+            use_products: false,
+            use_contacts: false,
+            use_home: true,
+            use_home_icon: false,
+            home_menu: this.config.home_menu,
+            use_profiles: false,
+          }
+        } else if (section == 3) {
+          sections.push({
+            id: 1, 
+            sectionName: 'profile',
+            sectionMenu: this.config.profile_menu,
+            sectionId: sectionId
+          })
+          await this.fetchProfilePost(headers)
+
+          this.config = {
+            title: 'User Config',
+            id: 1,
+            use_products: false,
+            use_contacts: false,
+            use_home: false,
+            use_home_icon: false,
+            use_profiles: false,
+            profile_menu: this.config.profile_menu
+          }
+        } else if(section == 4) {
+          sections.push({
+            id: 1, 
+            sectionName: 'contacts',
+            sectionMenu: this.config.contact_menu,
+            sectionId: sectionId
+          })
+          await this.fetchProductPost(headers)
+          await this.fetchProductList(this.page, this.limit, headers)
+
+          this.config = {
+            title: 'User Config',
+            id: 1,
+            use_products: true,
+            product_menu: this.config.product_menu,
+            use_contacts: false,
+            use_home: false,
+            use_home_icon: false,
+            use_profiles: false
           }
         }
-      }
-    },
-    async loadContactData(headers) {
-      let apiUrl = process.env.GRIDSOME_API_URL + '/api/contact'
-      let tmpContactList = []
-
-      axios.get(apiUrl, {headers: headers})
-      .then((response) => {
-        let contactList = response.data.data
-        contactList.forEach(contact => {
-            if (contact.type == 'social_media'){
-              let contactView = {}
-              let contactValue = contact.value
-              let iconSrc = './images/default-contact.png'
-
-              if (contactValue.name == 'facebook'){
-                iconSrc = './images/facebook-icon.png'
-              } else if (contactValue.name == 'instagram'){
-                iconSrc = './images/instagram-icon.png'
-              } else if (contactValue.name == 'linkedin'){
-                iconSrc = './images/linkedin-icon.png'
-              } else if (contactValue.name == 'twitter'){
-                iconSrc = './images/twitter-icon.png'
-              }
-
-              contactView.name = contactValue.name
-              contactView.value = contactValue.value
-              contactView.iconSrc = iconSrc
-              tmpContactList.push(contactView)
-            }
-        });
-
-        this.contactList = tmpContactList
-        this.isLoading = false
-      })
-    },
-    async loadProductData(headers) {
-      let productPostUrl = process.env.GRIDSOME_API_URL + '/api/post/type/single/4'
-      let productPost = await axios.get(productPostUrl, {headers: headers})
-      productPost = productPost.data.data
-
-      if (productPost != null && productPost != undefined && productPost.id != null){
-        this.productPost = {
-          id: 1,
-          title: productPost.title,
-          content: productPost.html_content,
-          coverImage: productPost.cover_image != null ? productPost.cover_image : 'null'
-        }
-      }
-
-      await this.loadProductListData(headers)
-    },
-    async loadProductListData(headers) {
-      let tmpProductList = []
-      let productListUrl = process.env.GRIDSOME_API_URL + '/api/product?page=1&limit=6'
-      let productList = await axios.get(productListUrl, {headers: headers})
-      productList = productList.data.data
-
-      if (productList != null && productList != undefined && productList.length > 0){
-        productList.forEach(product => {
-          tmpProductList.push({
-            id: product.id,
-            imageMain: product.image_main != null ? product.image_main : 'null',
-            name: product.name,
-            summary: product.summary
-          })
-        });
       } else {
-        for (let i = 0; i < 6; i++){
-          console.log('default called')
-          tmpProductList.push({
-            id: i,
-            imageMain: './images/default-icon-' + i + '.png',
-            name: 'Default Product Item',
-            summary: 'Default Product item summary'
+        let sectionId = 0
+        let config = this.config
+
+        if (config.use_home){
+          this.homeSection = {
+            id: 1,
+            section_name: 'home',
+            section_menu: config.home_menu,
+            section_id: sectionId,
+            use_icon: config.use_home_icon,
+            icon_url: config.home_icon
+          }
+
+          contentSections.push(this.homeSection)
+          sectionId++
+        }
+        if (config.use_profiles){
+          sections.push({
+            id: 2, 
+            section_name: 'profile',
+            section_menu: config.profile_menu,
+            section_id: sectionId
           })
+          sectionId++
+        }
+        if (config.use_products){
+          sections.push({
+            id: 3,
+            section_name: 'product',
+            section_menu: config.product_menu,
+            section_id: sectionId,
+          })
+          sectionId++
+        }
+        if (config.use_contacts){
+          sections.push({
+            id: 4,
+            section_name: 'contact',
+            section_menu: config.contact_menu,
+            section_id: sectionId,
+          })
+          sectionId++
         }
       }
 
-      this.productList = tmpProductList
-      this.isLoading = false
+      this.menuSections = sections
+      this.contentSections = contentSections.concat.apply(contentSections, sections)
     },
-    async loadWelcomePost(headers) {
+    async fetchContactList(headers) {
       try {
-        let welcomePostUrl = process.env.GRIDSOME_API_URL + '/api/post/type/single/2'
-        let welcomePostData = await axios.get(welcomePostUrl, {headers: headers})
-        welcomePostData = welcomePostData.data.data
+        await this.$store.dispatch('fetchContactList', headers)
+      }catch(error) {
+        console.log(error)
+      }
+      this.pageLoading = false
+    },
+    async fetchProductPost(headers) {
+      try {
+        await this.$store.dispatch('fetchProductPost', headers)
+      }catch(error) {
+        console.log(error)
+      }
+      this.pageLoading = false
+    },
+    async fetchProductList(page, limit, headers) {
+      try {
+        this.page = page
+        this.limit = limit
 
-        if (welcomePostData != null && welcomePostData != undefined){
-          this.welcomePost = {
-              id: 1,
-              title: welcomePostData.title,
-              content: welcomePostData.html_content,
-              coverImage: welcomePostData.cover_image != null ? welcomePostData.cover_image : 'null'
-          }
-        }
-
-        this.isLoading = false
+        await this.$store.dispatch('fetchProductList', {
+          page: this.page,
+          limit: this.limit,
+          headers: headers
+        })
+      }catch(error) {
+        console.log(error)
+      }
+      this.pageLoading = false
+    },
+    async fetchWelcomePost(headers) {
+      try {
+        await this.$store.dispatch('fetchWelcomePost', headers)
       } catch(error) {
         console.log(error)
       }
+      this.pageLoading = false
     },
-    async loadProfilePost(headers) {
+    async fetchProfilePost(headers) {
       try {
-        let profilePostUrl = process.env.GRIDSOME_API_URL + '/api/post/type/single/3'
-        let profilePostData = await axios.get(profilePostUrl, {headers: headers})
-        profilePostData = profilePostData.data.data
-
-        if (profilePostData != null && profilePostData != undefined){
-          this.profilePost = {
-              id: 1,
-              title: profilePostData.title,
-              content: profilePostData.html_content,
-              coverImage: profilePostData.cover_image != null ? profilePostData.cover_image : 'null'
-          }
-        }
-
-        this.isLoading = false
+        await this.$store.dispatch('fetchProfilePost', headers)
       } catch(error) {
         console.log(error)
+      }
+      this.pageLoading = false
+    },
+    async carouselClick(param) {
+      let halfScreen = Math.floor(screen.width / 2)
+      if (param.clientX > halfScreen){
+        if (this.page < this.meta.lastPage){
+          this.page++
+          await this.fetchProductList(this.page, this.limit, this.headers)
+        }
+      } else {
+        if (this.page > 1){
+          this.page--
+          await this.fetchProductData(this.page, this.limit, this.headers)
+        }
       }
     }
   },
   watch: {
     currentIndex: async function(newIndex, oldIndex) {
       if (newIndex == 0){
-        this.isLoading = true
-        await this.loadWelcomePost(this.headers)
+        this.pageLoading = true
+        await this.fetchWelcomePost(this.headers)
       } else if (newIndex == 1) {
-        this.isLoading = true
-        await this.loadProfilePost(this.headers)
+        this.pageLoading = true
+        await this.fetchProfilePost(this.headers)
       } else if (newIndex == 2) {
-        this.isLoading = true
-        await this.loadProductData(this.headers)
+        this.pageLoading = true
+        await this.fetchProductPost(this.headers)
+        await this.fetchProductList(1, 2, this.headers)
       } else if (newIndex == 3) {
-        this.isLoading = true
-        await this.loadContactData(this.headers)
+        this.pageLoading = true
+        await this.fetchContactList(this.headers)
       }
     }
   }
@@ -826,15 +562,19 @@ export default {
 </script>
 
 <style>
-body {
+/* body {
   margin: 0;
+  height: 100%;
+}
+html {
+  height: 100%;
+  font-family: 'Roboto', sans-serif;
 }
 .ksvuefp-section {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
 .fade-enter-active, .fade-leave-active {
   transition: all .5s;
   opacity: 1;
@@ -842,72 +582,228 @@ body {
 .fade-enter, .fade-leave-active {
   opacity: 0;
 }
-#app {
-  overflow: hidden;
-}
-
 .ksvuefp-section, .ksvuefp-section__overlay {
   height: 0%;
   width: 0%;
   top: 0;
   left: 0;
 }
-
 .ksvuefp-section, .ksvuefp-section__content {
   height: 100%;
   width: 100%;
   top: 0;
   left: 0;
-  position: absolute;
+  position: relative;
+}
+.ksvuefp-section, .ksvuefp-section__content, .content-wrapper {
+  position: relative;
 }
 
-.section-content {
-  position: absolute;
+.ksvuefp-sections {
+  height: 100%;
 }
-
 .default-color {
   color: whitesmoke
 }
-
+.v-toolbar__content {
+  height: 100% !important;
+  padding: 0 0;
+}
+#app {
+  overflow: hidden;
+}
+.section-content {
+  height: 85%; 
+  max-width: 100%; 
+  width: 100%; 
+  position: absolute; 
+  bottom: 0;
+}
+.section-content-mobile {
+  height: 90%; 
+  max-width: 100%; 
+  width: 100%; 
+  position: absolute; 
+  bottom: 0;
+}
+.default-color {
+  color: whitesmoke
+}
 .even-content {
   background-color: #24232A;
   color: whitesmoke;
 }
-
 .odd-content {
   background-color: #1C1B20;
   color: whitesmoke;
 }
-
 .cover-image-full {
   height: 100%;
   width: 100%;
 }
-
 .cover-image-not-full {
   height: 100%;
   width: 30%;
   background-color: #1C1B20;
 }
-
 .cover-image-not-full-mobile {
   height: 40%;
   width: 100%;
   background-color: #1C1B20;
 }
-
 .product-header {
   height: 35%;
   width: 100%
 }
-
 .product-detail {
   height: 100%;
   width: 100%
 }
+.clickable {
+  cursor: pointer;
+} */
+body {
+  margin: 0;
+  height: 100%;
+}
+html {
+  height: 100%;
+  font-family: 'Roboto', sans-serif;
+}
+.ksvuefp-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: all .5s;
+  opacity: 1;
+}
+.fade-enter, .fade-leave-active {
+  opacity: 0;
+}
+.ksvuefp-section, .ksvuefp-section__overlay {
+  height: 0%;
+  width: 0%;
+  top: 0;
+  left: 0;
+}
+.ksvuefp-section, .ksvuefp-section__content {
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  position: relative;
+}
+.ksvuefp-section, .ksvuefp-section__content, .content-wrapper {
+  position: relative;
+}
 
+.ksvuefp-sections {
+  height: 100%;
+}
+.default-color {
+  color: whitesmoke
+}
+.v-toolbar__content {
+  height: 100% !important;
+}
+#app {
+  overflow: hidden;
+}
+.section-content {
+  height: 90%; 
+  max-width: 100%; 
+  width: 100%; 
+  position: absolute; 
+  bottom: 0;
+}
+.section-content-mobile {
+  height: 90%; 
+  max-width: 100%; 
+  width: 100%; 
+  position: absolute; 
+  bottom: 0;
+}
+.cover-image-full {
+  height: 100%;
+  width: 100%;
+}
+.v-parallax__content, .product-parallax {
+  padding: 0 0;
+}
+.v-btn .v-btn__content .v-icon {
+  color: #000;
+}
+.v-btn .v-btn__content .v-icon, .toolbar {
+  color: whitesmoke;
+}
+.v-tabs {
+  height: 100%;
+}
+.v-tabs__bar {
+  height: 10%;
+}
+.v-tabs__wrapper {
+  overflow: hidden;
+  contain: content;
+  display: flex;
+  height: 100%;
+}
+.v-tabs__container--icons-and-text {
+  height: 100%;
+}
+.v-tabs__slider-wrapper, .minify {
+  width: 83px !important;
+}
+.v-tabs__slider-wrapper, .mobile {
+  min-width: 50%;
+}
+.v-tabs__container--icons-and-text .v-tabs__div, .resize {
+  min-width: 83px;
+}
+.v-tabs__item, .minify {
+  max-width: 83px;
+}
+.v-tabs__item, .mobile {
+  max-width: 100%;
+  padding: 0 0;
+}
+.v-window, .tab-content {
+  height: 90%;
+}
+.v-window__container, .tab-content {
+  height: 100%;
+}
+.v-window-item, .tab-content {
+  height: 100%;
+}
+.v-window, .tab-content-mobile {
+  width: 100%;
+}
+.v-window__container, .tab-content-mobile {
+  width: 100%;
+}
+.v-window-item, .tab-content-mobile {
+  width: 100%;
+}
+.v-carousel__item, .menu-content {
+  height: 100% !important;
+}
 .clickable {
   cursor: pointer;
 }
-
+#map {
+  height: 90%;
+  width: 80%;
+  background-color: #ffffff;
+}
+.even-content {
+  background-color: #24232A;
+  color: whitesmoke;
+}
+.odd-content {
+  background-color: #1C1B20;
+  color: whitesmoke;
+}
 </style>

@@ -2,6 +2,17 @@
 
 This is a default dark theme for Gapura+, build using Gridsome. This guidelines is for creating a new standard theme for Gapura+.
 
+## Installing Theme
+If you want to try this theme locally, you can do that by do the following:
+
+1. Clone this repo to your environment with `git clone https://github.com/ordentid/gapuraplus-default-dark-theme/`.
+2. Change directory to the root project
+3. `npm install` to install all of the dependency of the project
+4. `gridsome develop` to run this project locally, or `gridsome build` to build this project and get the static HTML files.
+
+## Customizing Theme
+You can customize this theme, or even create a completely brand new for your Gapura site. Following steps are your guide to how create a custom theme in Gapura platform.
+
 ### 1. Gridsome Overview
 
 Gridsome is a static site renderer framework, that made to work with Vue.JS. Gridsome consist of server side process, and client side process. Gridsome server side is tasked to generate static html site from `.vue` files, and the main file for server side processing is `gridsome.server.js`. As for Gridsome client side, it is tasked to do any process inside the client, mainly put in `.vue` files, and also `main.js` file.
@@ -18,10 +29,7 @@ Gridsome is a static site renderer framework, that made to work with Vue.JS. Gri
 
 ### 4. Gapura+ Environment Variable
 
-Gapura+ utilizes Environment Variables to define some default settings like API Url and Project ID. These variables are defined when user is creating a new subscription. The Variables are separated by server side and client side.
-- Server Side Env
-  - API_URL
-  - PROJECT_ID
+Gapura+ utilizes Environment Variables to define some default settings like API Url and Project ID. These variables are defined when user is creating a new subscription. The Variables are separated by server side and client side. Currently, Gapura only supporting Client-Side variables. Those variables are:
   
 - Client Side Env
   - GRIDSOME_API_URL
@@ -51,6 +59,32 @@ Site Config is used to determine what modules is accessible for user,and config 
   - contact_menu: title for contact menu button
 
 These config can differs from theme to theme, e.g in Default Theme, the Blog Module is not supported, so the config value might be null.
+
+### 6. Gapura Contact Type
+Gapura currently offers some contact types, to be implemented inside your theme. Supported contacts right now are:
+
+```
+[
+    {
+        "id": "social_media",
+        "name": "Media Sosial"
+    },
+    {
+        "id": "address",
+        "name": "Alamat"
+    },
+    {
+        "id": "operational_hour",
+        "name": "Jam Operasional"
+    },
+    {
+        "id": "location",
+        "name": "Lokasi"
+    }
+]
+```
+
+You can get these data by accessing Contact API below.
 
 ### 6. Data API
 

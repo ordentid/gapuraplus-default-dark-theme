@@ -112,3 +112,41 @@ Product List: /api/product
 Contact List: /api/contact
 ```
 
+## Add Theme to Gapura Theme List
+
+### For Developer
+
+1. Upload your theme to online git repository, preferred GitHub.
+2. Make sure your repository is set as public
+3. Send your repository url via email to rachmat@ordent.co with subject [Gapura Theme - {THEME_NAME}], and content of your email consist of:
+  - Repository Url
+  - Short Description of your theme
+  - Desirable contact type (social media, location, operational hour, address)
+  - Default config (which page you used, e.g Home, Profile, Product, Contact)
+4. Wait until you get confirmation from our admin
+
+### For Admin
+
+1. Fork theme repository tou ordent or your own repository
+2. Make sure you have access to Ordent Google Source Repository
+3. Head to `gapuraplus` project, and select `Source Repositories` from side menu
+4. Make sure you have the correct project in Source Repository, which is `gapuraplus`
+5. Click button `Add Repository` and then select `Connect External Repository` from selection
+6. Make sure you have the correct project inside `Project` drop down. Then, select git repositories and select github
+7. Checklist checkbox `I Authorized...` and then click `Connect to Github`
+8 List of project will appear. Select your forked theme repo from the list. if you are not connected to the correct account, click `Connect to different account` button.
+9. After selecting the correct repository, click `Connect selected repository` button.
+10. If successfull, the new project will appear in repository list of Google Cloud Source Repository.
+11. Made POST Request via Postman with `https://api-dot-gapuraplus.appspot.com/api/dashboard/theme/upsert` as endpoint
+12. Make sure body consist of these values:
+```
+{
+  name: string (mandatory),
+  type: string (mandatory),
+  repo_name: string (mandatory, copy paste the repo name from Cloud Resource Repository),
+  contact_type: json (mandatory),
+  default_config: json (mandatory),
+  summary: string (optional)
+}
+```
+13. if your request is successfull, the theme will appear in Gapura Theme List

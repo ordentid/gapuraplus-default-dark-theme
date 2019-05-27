@@ -305,6 +305,10 @@ export default {
           case 'linkedin':
             element.value.icon_src = './images/linkedin-icon.png'
             break
+          case 'whatsapp':
+            element.value.icon_src = './images/whatsapp-icon.png'
+            element.value.value = 'https://wa.me/62' + element.value.value
+            break
           default:
             console.log('No Data')
         }

@@ -148,7 +148,7 @@ export default function (Vue, { router, head, isClient, appOptions }) {
           let response = await axios.get(url, {headers: params.headers})
           if (response.data.data != null && response.data.data.length > 0){
             commit('setProductList', response.data.data)
-            commit('setMeta', response.meta.meta)
+            commit('setMeta', response.data.meta)
           } else {
             let productList = []
 

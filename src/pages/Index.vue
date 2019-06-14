@@ -146,23 +146,30 @@
             </v-layout>
             <v-carousel hide-delimiters dark style="height: 50%; width: 100%;" @click.native="carouselClick">
               <v-carousel-item>
-                <v-layout row wrap product-detail justify-center fill-width fill-height align-center pa-0>
-                  <v-flex
-                    xs5
-                    v-for="product in productList"
-                    :items="product"
-                    v-bind:key="product.id">
-                      <v-card tile flat color="#1C1B20" style="color: whitesmoke; height: 100%; width: 90%;">
-                        <v-layout row wrap align-start justify-end style="height: 100%;">
-                          <v-img :src="product.image_main" max-height="50%" max-width="50%" contain/>
-                          <v-layout column wrap style="width: 60%; height: 100%;">
-                            <span class="body-2 text-xs-left font-weight-strong ml-2 mb-1">{{ product.name}}</span>
-                            <span class="caption text-xs-left ml-2">{{ product.summary }}</span>
+                <template v-if="!carouselLoading">
+                  <v-layout row wrap product-detail justify-center fill-width fill-height align-center pa-0>
+                    <v-flex
+                      xs5
+                      v-for="product in productList"
+                      :items="product"
+                      v-bind:key="product.id">
+                        <v-card tile flat color="#1C1B20" style="color: whitesmoke; height: 100%; width: 90%;">
+                          <v-layout row wrap align-start justify-end style="height: 100%;">
+                            <v-img :src="product.image_main" max-height="50%" max-width="50%" contain/>
+                            <v-layout column wrap style="width: 60%; height: 100%;">
+                              <span class="body-2 text-xs-left font-weight-strong ml-2 mb-1">{{ product.name}}</span>
+                              <span class="caption text-xs-left ml-2">{{ product.summary }}</span>
+                            </v-layout>
                           </v-layout>
-                        </v-layout>
-                      </v-card>
-                  </v-flex>
-                </v-layout>
+                        </v-card>
+                    </v-flex>
+                  </v-layout>
+                </template>
+                <template v-else>
+                  <v-layout column wrap class="tab-content-mobile pa-0 justify-center align-center" style="height: 100%; width: 100%; max-width: 100%;">
+                    <v-progress-circular indeterminate color="grey" style="height: 50%; width: 50%;"></v-progress-circular>
+                  </v-layout>
+                </template>
               </v-carousel-item>
             </v-carousel>
           </v-layout>
@@ -181,24 +188,31 @@
             </v-layout>
             <v-carousel hide-delimiters dark style="height: 50%; width: 100%;" @click.native="carouselClick">
               <v-carousel-item>
-                <v-layout column wrap product-detail justify-center fill-width fill-height align-center pa-0>
-                  <v-flex
-                    xs6
-                    v-for="product in productList"
-                    :items="product"
-                    v-bind:key="product.id"
-                    style="width: 80%;">
-                      <v-card tile flat color="#1C1B20" style="color: whitesmoke; height: 100%; width: 100;" class="justify-center align-center">
-                        <v-layout row wrap align-center justify-center style="height: 100%;">
-                          <v-img :src="product.image_main" max-height="50%" max-width="50%" contain/>
-                          <v-layout column wrap>
-                            <span class="body-2 text-xs-left font-weight-strong ml-2 mb-1">{{ product.name}}</span>
-                            <span class="caption text-xs-left ml-2">{{ product.summary }}</span>
+                <template v-if="!carouselLoading">
+                  <v-layout column wrap product-detail justify-center fill-width fill-height align-center pa-0>
+                    <v-flex
+                      xs6
+                      v-for="product in productList"
+                      :items="product"
+                      v-bind:key="product.id"
+                      style="width: 80%;">
+                        <v-card tile flat color="#1C1B20" style="color: whitesmoke; height: 100%; width: 100;" class="justify-center align-center">
+                          <v-layout row wrap align-center justify-center style="height: 100%;">
+                            <v-img :src="product.image_main" max-height="50%" max-width="50%" contain/>
+                            <v-layout column wrap>
+                              <span class="body-2 text-xs-left font-weight-strong ml-2 mb-1">{{ product.name}}</span>
+                              <span class="caption text-xs-left ml-2">{{ product.summary }}</span>
+                            </v-layout>
                           </v-layout>
-                        </v-layout>
-                      </v-card>
-                  </v-flex>
-                </v-layout>
+                        </v-card>
+                    </v-flex>
+                  </v-layout>
+                </template>
+                <template v-else>
+                  <v-layout column wrap class="tab-content-mobile pa-0 justify-center align-center" style="height: 100%; width: 100%; max-width: 100%;">
+                    <v-progress-circular indeterminate color="grey" style="height: 50%; width: 50%;"></v-progress-circular>
+                  </v-layout>
+                </template>
               </v-carousel-item>
             </v-carousel>
           </v-layout>
@@ -499,6 +513,7 @@ export default {
       this.pageLoading = false
     },
     async fetchProductList(page, limit, headers) {
+      this.carouselLoading = true
       try {
         this.page = page
         this.limit = limit
@@ -511,7 +526,7 @@ export default {
       }catch(error) {
         console.log(error)
       }
-      this.pageLoading = false
+      this.carouselLoading = false
     },
     async fetchWelcomePost(headers) {
       try {
@@ -530,16 +545,18 @@ export default {
       this.pageLoading = false
     },
     async carouselClick(param) {
-      let halfScreen = Math.floor(screen.width / 2)
-      if (param.clientX > halfScreen){
-        if (this.page < this.meta.lastPage){
-          this.page++
-          await this.fetchProductList(this.page, this.limit, this.headers)
-        }
-      } else {
-        if (this.page > 1){
-          this.page--
-          await this.fetchProductData(this.page, this.limit, this.headers)
+      if (!this.carouselLoading){
+        let halfScreen = Math.floor(screen.width / 2)
+        if (param.clientX > halfScreen){
+          if (this.page < this.meta.lastPage){
+            this.page++
+            await this.fetchProductList(this.page, this.limit, this.headers)
+          }
+        } else {
+          if (this.page > 1){
+            this.page--
+            await this.fetchProductList(this.page, this.limit, this.headers)
+          }
         }
       }
     }

@@ -111,7 +111,7 @@
               <span class="subheading" v-html="profilePost.html_content" />
             </v-layout>
             <v-parallax
-              :src="profilePost.coverImage"
+              :src="profilePost.cover_image"
               class="cover-image-not-full odd-content"
               style="height: 100%; width: 35%;"
             >
@@ -123,7 +123,7 @@
               <span class="subheading" v-html="profilePost.html_content" />
             </v-layout>
             <v-parallax
-              :src="profilePost.coverImage"
+              :src="profilePost.cover_image"
               class="cover-image-not-full odd-content"
               style="height: 55%; width: 100%;"
             >
@@ -135,7 +135,7 @@
             <v-layout fill-width ma-0 style="height: 50%;">
               <v-parallax
                 dark
-                :src="productPost.coverImage"
+                :src="productPost.cover_image"
                 class="cover-image-full"
                 height="100%">
                   <v-layout column wrap justify-center align-center>
@@ -170,7 +170,7 @@
             <v-layout fill-width ma-0 style="height: 50%;">
               <v-parallax
                 dark
-                :src="productPost.coverImage"
+                :src="productPost.cover_image"
                 class="cover-image-full"
                 height="100%">
                   <v-layout column wrap justify-center align-center>

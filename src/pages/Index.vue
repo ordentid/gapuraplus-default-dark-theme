@@ -187,7 +187,7 @@
                     v-for="product in productList"
                     :items="product"
                     v-bind:key="product.id"
-                    style="width: 80%; height: 100%;">
+                    style="width: 80%;">
                       <v-card tile flat color="#1C1B20" style="color: whitesmoke; height: 100%; width: 100;" class="justify-center align-center">
                         <v-layout row wrap align-center justify-center style="height: 100%;">
                           <v-img :src="product.image_main" max-height="50%" max-width="50%" contain/>

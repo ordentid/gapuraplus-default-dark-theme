@@ -80,28 +80,32 @@
       >
         <template v-if="section.section_name == 'home'">
           <v-layout v-if="!pageLoading" fill-width ma-0 pa-0 hidden-sm-and-down odd-content section-content>
-              <v-parallax
+              <v-img
                 dark
                 :src="welcomePost.cover_image"
                 class="cover-image-full"
-                style="height: 100%;">
-                  <v-layout column wrap justify-center align-center>
-                    <span class="display-3 font-weight-strong mb-3 text-xs-center">{{ welcomePost.title}}</span>
-                    <span class="subheading text-xs-center" v-html="welcomePost.html_content" />
-                  </v-layout>
-              </v-parallax>
+                height="100%"
+                width="100%"
+              >
+                <v-layout column wrap justify-center align-center fill-height fill-width style="background-color: rgb(0,0,0,0.4)">
+                  <span class="display-3 font-weight-strong mb-3 text-xs-center">{{ welcomePost.title}}</span>
+                  <span class="subheading text-xs-center" v-html="welcomePost.html_content" />
+                </v-layout>
+              </v-img>
           </v-layout>
           <v-layout v-if="!pageLoading" fluid fill-height fill-width ma-0 hidden-sm-and-up pa-0 odd-content section-content-mobile>
-              <v-parallax
+              <v-img
                 dark
                 :src="welcomePost.cover_image"
                 class="cover-image-full"
-                style="height: 100%;">
-                  <v-layout column wrap justify-center align-center>
-                    <span class="display-1 font-weight-strong mb-3 text-xs-center text-xs-center">{{ welcomePost.title}}</span>
-                    <span class="subheading text-xs-center" v-html="welcomePost.html_content" />
-                  </v-layout>
-              </v-parallax>
+                height="100%"
+                width="100%"
+              >
+                <v-layout column wrap justify-center align-center fill-height fill-width style="background-color: rgb(0,0,0,0.4)">
+                  <span class="display-1 font-weight-strong mb-3 text-xs-center text-xs-center">{{ welcomePost.title}}</span>
+                  <span class="subheading text-xs-center" v-html="welcomePost.html_content" />
+                </v-layout>
+              </v-img>
           </v-layout>
         </template>
         <template v-if="section.section_name == 'profile'">
@@ -383,6 +387,8 @@ export default {
       let contentSections = []
       await this.$store.dispatch('fetchConfig', headers)
 
+      let sectionId = 0
+      let config = this.config
       if (headers.Preview){
         if (section == 2){
           this.homeSection = {
@@ -448,9 +454,6 @@ export default {
           }
         }
       } else {
-        let sectionId = 0
-        let config = this.config
-
         if (config.use_home){
           this.homeSection = {
             id: 1,

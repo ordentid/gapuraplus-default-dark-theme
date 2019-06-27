@@ -100,6 +100,7 @@
                 class="cover-image-full"
                 height="100%"
                 width="100%"
+                contain
               >
                 <v-layout column wrap justify-center align-center fill-height fill-width style="background-color: rgb(0,0,0,0.4)">
                   <span class="display-1 font-weight-strong mb-3 text-xs-center text-xs-center">{{ welcomePost.title}}</span>
@@ -126,17 +127,25 @@
               <span class="display-1 font-weight-strong mb-5">{{ profilePost.title}}</span>
               <span class="subheading" v-html="profilePost.html_content" />
             </v-layout>
-            <v-parallax
+            <v-img
+              dark
+              :src="profilePost.cover_image"
+              class="cover-image-full odd-content"
+              height="55%"
+              width="100%"
+              contain
+            />
+            <!-- <v-parallax
               :src="profilePost.cover_image"
               class="cover-image-not-full odd-content"
               style="height: 55%; width: 100%;"
             >
-            </v-parallax>
+            </v-parallax> -->
           </v-layout>
         </template>
         <template v-if="section.section_name == 'product'">
           <v-layout v-if="!pageLoading" column fill-width ma-0 pa-0 hidden-sm-and-down odd-content section-content>
-            <v-layout fill-width ma-0 style="height: 50%;">
+            <v-layout fill-width ma-0 style="height: 45%;">
               <v-parallax
                 dark
                 :src="productPost.cover_image"
@@ -148,7 +157,7 @@
                   </v-layout>
               </v-parallax>
             </v-layout>
-            <v-carousel hide-delimiters dark style="height: 50%; width: 100%;" @click.native="carouselClick">
+            <v-carousel hide-delimiters dark style="height: 55%; width: 100%;" @click.native="carouselClick">
               <v-carousel-item>
                 <template v-if="!carouselLoading">
                   <v-layout row wrap product-detail justify-center fill-width fill-height align-center pa-0>
@@ -394,10 +403,10 @@ export default {
           this.homeSection = {
             id: 1,
             section_name: 'home',
-            section_menu: config.home_menu,
+            section_menu: config.home.menu_name,
             section_id: sectionId,
-            use_icon: config.use_home_icon,
-            icon_url: config.home_icon
+            use_icon: config.home.use_icon,
+            icon_url: config.home.menu_icon
           }
           contentSections.push(this.homeSection)
 
@@ -410,14 +419,14 @@ export default {
             use_contacts: false,
             use_home: true,
             use_home_icon: false,
-            home_menu: this.config.home_menu,
+            home_menu: config.home.menu_name,
             use_profiles: false,
           }
         } else if (section == 3) {
           sections.push({
             id: 1, 
             sectionName: 'profile',
-            sectionMenu: this.config.profile_menu,
+            sectionMenu: config.profile.menu_name,
             sectionId: sectionId
           })
           await this.fetchProfilePost(headers)
@@ -430,13 +439,13 @@ export default {
             use_home: false,
             use_home_icon: false,
             use_profiles: false,
-            profile_menu: this.config.profile_menu
+            profile_menu: config.profile.menu_name
           }
         } else if(section == 4) {
           sections.push({
             id: 1, 
             sectionName: 'contacts',
-            sectionMenu: this.config.contact_menu,
+            sectionMenu: config.contact.menu_name,
             sectionId: sectionId
           })
           await this.fetchProductPost(headers)
@@ -446,7 +455,7 @@ export default {
             title: 'User Config',
             id: 1,
             use_products: true,
-            product_menu: this.config.product_menu,
+            product_menu: config.contact.menu_name,
             use_contacts: false,
             use_home: false,
             use_home_icon: false,
@@ -454,42 +463,44 @@ export default {
           }
         }
       } else {
-        if (config.use_home){
+        if (config.home){
+          let home = config.home
+
           this.homeSection = {
             id: 1,
             section_name: 'home',
-            section_menu: config.home_menu,
+            section_menu: home.menu_name,
             section_id: sectionId,
-            use_icon: config.use_home_icon,
-            icon_url: config.home_icon
+            use_icon: home.use_icon,
+            icon_url: home.menu_icon
           }
 
           contentSections.push(this.homeSection)
           sectionId++
         }
-        if (config.use_profiles){
-          sections.push({
+        if (config.profile){
+            sections.push({
             id: 2, 
             section_name: 'profile',
-            section_menu: config.profile_menu,
+            section_menu: config.profile.menu_name,
             section_id: sectionId
           })
           sectionId++
         }
-        if (config.use_products){
+        if (config.product){
           sections.push({
             id: 3,
             section_name: 'product',
-            section_menu: config.product_menu,
+            section_menu: config.product.menu_name,
             section_id: sectionId,
           })
           sectionId++
         }
-        if (config.use_contacts){
+        if (config.contact){
           sections.push({
             id: 4,
             section_name: 'contact',
-            section_menu: config.contact_menu,
+            section_menu: config.contact.menu_name,
             section_id: sectionId,
           })
           sectionId++

@@ -142,7 +142,7 @@ export default function (Vue, { router, head, isClient, appOptions }) {
       async fetchProductList({commit}, params) {
         let page = params.page
         let limit = params.limit
-        let url = apiUrl + '/api/product?type=0&orderBy=created_at&page=' + page + '&limit=' + limit
+        let url = apiUrl + '/api/item?type=0&orderBy=created_at&page=' + page + '&limit=' + limit
 
         try {
           let response = await axios.get(url, {headers: params.headers})

@@ -6,5 +6,14 @@
 
 module.exports = {
   siteName: 'Powered by Gapura+',
-  plugins: []
+  plugins: [
+    {
+      use: 'gridsome-source-tomatto-data',
+      options: {
+        config: 'config.json',
+        projectId: process.env.PROJECT_ID,
+        apiUrl: process.env.API_URL
+      }
+    }
+  ]
 }

@@ -4,13 +4,26 @@
        <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" :clipped="clipped" fixed app dark floating class="hidden-sm-and-up" width="225px">
          <v-layout column wrap fill-height align-end justify-center>
           <v-list>
-            <div v-for="(menu, i) in contentSections" :key="i">
-              <v-list-tile @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: menu.section_id})" @click="drawer = false" class="my-3">
+              <v-list-tile @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: 0})" @click="drawer = false" class="my-3">
                   <v-list-tile-content>
-                      <v-list-tile-title v-text="menu.section_menu" justify-end/>
+                      <v-list-tile-title v-text="'Beranda'" justify-end/>
                   </v-list-tile-content>
               </v-list-tile>
-            </div>
+              <v-list-tile @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: 1})" @click="drawer = false" class="my-3">
+                  <v-list-tile-content>
+                      <v-list-tile-title v-text="'Profil'" justify-end/>
+                  </v-list-tile-content>
+              </v-list-tile>
+              <v-list-tile @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: 2})" @click="drawer = false" class="my-3">
+                  <v-list-tile-content>
+                      <v-list-tile-title v-text="'Layanan'" justify-end/>
+                  </v-list-tile-content>
+              </v-list-tile>
+              <v-list-tile @click.prevent="$ksvuefp.$emit('ksvuefp-nav-click', {nextIndex: 3})" @click="drawer = false" class="my-3">
+                  <v-list-tile-content>
+                      <v-list-tile-title v-text="'Kontak'" justify-end/>
+                  </v-list-tile-content>
+              </v-list-tile>
           </v-list>
          </v-layout>
       </v-navigation-drawer>
@@ -72,214 +85,207 @@
         </v-layout>
       </v-toolbar>
       <ksvuefp-section
-        v-for="section in contentSections"
-        :section="section"
-        :key="section.id"
-        :section-index="section.section_id"
         class="content-wrapper"
+        :section="welcomePost"
+        :key="welcomePost.id"
+        :section-index=0
       >
-        <template v-if="section.section_name == 'home'">
-          <v-layout v-if="!pageLoading" fill-width ma-0 pa-0 hidden-sm-and-down odd-content section-content>
-              <v-img
-                dark
-                :src="welcomePost.cover_image"
-                class="cover-image-full"
-                height="100%"
-                width="100%"
-              >
-                <v-layout column wrap justify-center align-center fill-height fill-width style="background-color: rgb(0,0,0,0.4)">
-                  <span class="display-3 font-weight-strong mb-3 text-xs-center">{{ welcomePost.title}}</span>
-                  <span class="subheading text-xs-center" v-html="welcomePost.html_content" />
-                </v-layout>
-              </v-img>
-          </v-layout>
-          <v-layout v-if="!pageLoading" fluid fill-height fill-width ma-0 hidden-sm-and-up pa-0 odd-content section-content-mobile>
-              <v-img
-                dark
-                :src="welcomePost.cover_image"
-                class="cover-image-full"
-                height="100%"
-                width="100%"
-                contain
-              >
-                <v-layout column wrap justify-center align-center fill-height fill-width style="background-color: rgb(0,0,0,0.4)">
-                  <span class="display-1 font-weight-strong mb-3 text-xs-center text-xs-center">{{ welcomePost.title}}</span>
-                  <span class="subheading text-xs-center" v-html="welcomePost.html_content" />
-                </v-layout>
-              </v-img>
-          </v-layout>
-        </template>
-        <template v-if="section.section_name == 'profile'">
-          <v-layout v-if="!pageLoading" row fill-width ma-0 pa-0 hidden-sm-and-down even-content section-content>
+        <v-layout name="product" fill-width ma-0 pa-0 hidden-sm-and-down odd-content section-content>
+            <v-img
+              dark
+              :src="welcomePost.cover"
+              class="cover-image-full"
+              height="100%"
+              width="100%"
+            >
+              <v-layout column wrap justify-center align-center fill-height fill-width style="background-color: rgb(0,0,0,0.4)">
+                <span class="display-3 font-weight-strong mb-3 text-xs-center">{{ welcomePost.title}}</span>
+                <span class="subheading text-xs-center" v-html="welcomePost.content" />
+              </v-layout>
+            </v-img>
+        </v-layout>
+        <v-layout fluid fill-height fill-width ma-0 hidden-sm-and-up pa-0 odd-content section-content-mobile>
+            <v-img
+              dark
+              :src="welcomePost.cover"
+              class="cover-image-full"
+              height="100%"
+              width="100%"
+              contain
+            >
+              <v-layout column wrap justify-center align-center fill-height fill-width style="background-color: rgb(0,0,0,0.4)">
+                <span class="display-1 font-weight-strong mb-3 text-xs-center text-xs-center">{{ welcomePost.title}}</span>
+                <span class="subheading text-xs-center" v-html="welcomePost.content" />
+              </v-layout>
+            </v-img>
+        </v-layout>
+      </ksvuefp-section>
+      <ksvuefp-section
+        class="content-wrapper"
+        :section="profilePost"
+        :key="profilePost.id"
+        :section-index=1
+      >
+        <v-layout row fill-width ma-0 pa-0 hidden-sm-and-down even-content section-content>
             <v-layout column wrap justify-left align-left pl-4 pt-5 style="width: 65%;">
               <span class="display-3 font-weight-strong mb-5">{{ profilePost.title}}</span>
-              <span class="subheading" v-html="profilePost.html_content" />
+              <span class="subheading" v-html="profilePost.content" />
             </v-layout>
             <v-parallax
-              :src="profilePost.cover_image"
+              :src="profilePost.cover"
               class="cover-image-not-full odd-content"
               style="height: 100%; width: 35%;"
             >
             </v-parallax>
           </v-layout>
-          <v-layout v-if="!pageLoading" column fill-height fill-width ma-0 hidden-sm-and-up pa-0 even-content section-content-mobile>
+          <v-layout column fill-height fill-width ma-0 hidden-sm-and-up pa-0 even-content section-content-mobile>
             <v-layout column wrap justify-left align-left pl-4 pt-3 style="height: 45%;">
               <span class="display-1 font-weight-strong mb-5">{{ profilePost.title}}</span>
-              <span class="subheading" v-html="profilePost.html_content" />
+              <span class="subheading" v-html="profilePost.content" />
             </v-layout>
             <v-img
               dark
-              :src="profilePost.cover_image"
+              :src="profilePost.cover"
               class="cover-image-full odd-content"
               height="55%"
               width="100%"
               contain
             />
-            <!-- <v-parallax
-              :src="profilePost.cover_image"
-              class="cover-image-not-full odd-content"
-              style="height: 55%; width: 100%;"
-            >
-            </v-parallax> -->
           </v-layout>
-        </template>
-        <template v-if="section.section_name == 'product'">
-          <v-layout v-if="!pageLoading" column fill-width ma-0 pa-0 hidden-sm-and-down odd-content section-content>
+      </ksvuefp-section>
+      <ksvuefp-section
+        class="content-wrapper"
+        :section="productPost"
+        :key="productPost.id"
+        :section-index=2
+      >
+        <v-layout column fill-width ma-0 pa-0 hidden-sm-and-down odd-content section-content>
             <v-layout fill-width ma-0 style="height: 45%;">
               <v-parallax
                 dark
-                :src="productPost.cover_image"
+                :src="productPost.cover"
                 class="cover-image-full"
                 height="100%">
                   <v-layout column wrap justify-center align-center>
                     <span class="display-1 text-xs-center font-weight-strong pt-4">{{ productPost.title}}</span>
-                    <span class="body-1 text-xs-center pt-4 mb-3" v-html="productPost.html_content"></span>
+                    <span class="body-1 text-xs-center pt-4 mb-3" v-html="productPost.content"></span>
                   </v-layout>
               </v-parallax>
             </v-layout>
             <v-carousel hide-delimiters dark style="height: 55%; width: 100%;" @click.native="carouselClick">
-              <v-carousel-item>
-                <template v-if="!carouselLoading">
+              <v-carousel-item
+                v-for="(carousel, index) in productCarousel"
+                :key="index"
+              >
                   <v-layout row wrap product-detail justify-center fill-width fill-height align-center pa-0>
                     <v-flex
                       xs5
-                      v-for="product in productList"
-                      :items="product"
-                      v-bind:key="product.id">
+                      v-for="item in carousel.carouselItems"
+                      :items="item"
+                      v-bind:key="item.id">
                         <v-card tile flat color="#1C1B20" style="color: whitesmoke; height: 100%; width: 90%;">
                           <v-layout row wrap align-start justify-end style="height: 100%;">
-                            <v-img :src="product.image_main" max-height="50%" max-width="50%" contain/>
+                            <v-img :src="item.image" max-height="50%" max-width="50%" contain/>
                             <v-layout column wrap style="width: 60%; height: 100%;">
-                              <span class="body-2 text-xs-left font-weight-strong ml-2 mb-1">{{ product.name}}</span>
-                              <span class="caption text-xs-left ml-2">{{ product.summary }}</span>
+                              <span class="body-2 text-xs-left font-weight-strong ml-2 mb-1">{{ item.name}}</span>
+                              <span class="caption text-xs-left ml-2">{{ item.description }}</span>
                             </v-layout>
                           </v-layout>
                         </v-card>
                     </v-flex>
                   </v-layout>
-                </template>
-                <template v-else>
-                  <v-layout column wrap class="tab-content-mobile pa-0 justify-center align-center" style="height: 100%; width: 100%; max-width: 100%;">
-                    <v-progress-circular indeterminate color="grey" style="height: 50%; width: 50%;"></v-progress-circular>
-                  </v-layout>
-                </template>
               </v-carousel-item>
             </v-carousel>
           </v-layout>
-          <v-layout v-if="!pageLoading" column fill-height fill-width ma-0 hidden-sm-and-up pa-0 odd-content section-content-mobile>
+          <v-layout column fill-height fill-width ma-0 hidden-sm-and-up pa-0 odd-content section-content-mobile>
             <v-layout fill-width ma-0 style="height: 50%;">
               <v-parallax
                 dark
-                :src="productPost.cover_image"
+                :src="productPost.cover"
                 class="cover-image-full"
                 height="100%">
                   <v-layout column wrap justify-center align-center>
                     <span class="display-1 text-xs-center font-weight-strong pt-4">{{ productPost.title}}</span>
-                    <span class="body-1 text-xs-center pt-4 mb-3" v-html="productPost.html_content"></span>
+                    <span class="body-1 text-xs-center pt-4 mb-3" v-html="productPost.content"></span>
                   </v-layout>
               </v-parallax>
             </v-layout>
             <v-carousel hide-delimiters dark style="height: 50%; width: 100%;" @click.native="carouselClick">
-              <v-carousel-item>
-                <template v-if="!carouselLoading">
+              <v-carousel-item
+                v-for="(carousel, index) in productCarousel"
+                :key="index"
+              >
                   <v-layout column wrap product-detail justify-center fill-width fill-height align-center pa-0>
                     <v-flex
                       xs6
-                      v-for="product in productList"
-                      :items="product"
-                      v-bind:key="product.id"
+                      v-for="item in carousel.carouselItems"
+                      :items="item"
+                      v-bind:key="item.id"
                       style="width: 80%;">
                         <v-card tile flat color="#1C1B20" style="color: whitesmoke; height: 100%; width: 100;" class="justify-center align-center">
                           <v-layout row wrap align-center justify-center style="height: 100%;">
-                            <v-img :src="product.image_main" max-height="50%" max-width="50%" contain/>
+                            <v-img :src="item.image" max-height="50%" max-width="50%" contain/>
                             <v-layout column wrap>
-                              <span class="body-2 text-xs-left font-weight-strong ml-2 mb-1">{{ product.name}}</span>
-                              <span class="caption text-xs-left ml-2">{{ product.summary }}</span>
+                              <span class="body-2 text-xs-left font-weight-strong ml-2 mb-1">{{ item.name}}</span>
+                              <span class="caption text-xs-left ml-2">{{ item.description }}</span>
                             </v-layout>
                           </v-layout>
                         </v-card>
                     </v-flex>
                   </v-layout>
-                </template>
-                <template v-else>
-                  <v-layout column wrap class="tab-content-mobile pa-0 justify-center align-center" style="height: 100%; width: 100%; max-width: 100%;">
-                    <v-progress-circular indeterminate color="grey" style="height: 50%; width: 50%;"></v-progress-circular>
-                  </v-layout>
-                </template>
               </v-carousel-item>
             </v-carousel>
           </v-layout>
-        </template>
-        <template v-if="section.section_name == 'contact'">
-          <v-layout v-if="!pageLoading" column fill-width ma-0 pa-0 hidden-sm-and-down odd-content section-content>
-            <v-toolbar color="#1C1B20" flat fill-width depressed style="color:whitesmoke; position: relative; height: 5%;">
-              <v-layout row wrap fill-width fill-height justify-center align-center>
-                <v-toolbar-title class="title strong text-xs-center mr-5 pr-5 align-center" v-text="'Send email to us for further inquiry'" />
-                <v-toolbar-items class="ml-5 pl-5">
-                  <v-btn :href="config.mailLink" style="height: 80%">Contact Us</v-btn>
-                </v-toolbar-items>
-              </v-layout>
-            </v-toolbar>
-            <v-layout row wrap fill-width align-center justify-center> 
-              <template v-for="(contact, i) in contactList">
-                <v-avatar size="44px" :key="i" color="grey" class="mx-3 clickable" @click="goToLink(contact.value.value)">
-                  <v-img :src="contact.value.icon_src" max-height="30" max-width="30"></v-img>
-                </v-avatar>
-              </template>
-            </v-layout>
-            <v-toolbar color="#1C1B20" flat fill-width depressed style="color:whitesmoke; height: 5%;">
-              <v-layout row wrap fill-width justify-center>
-                <v-toolbar-title class="body-2" v-text="'Created by Ordent'" />
-              </v-layout>
-            </v-toolbar>
-          </v-layout>
-          <v-layout v-if="!pageLoading" column fill-height fill-width ma-0 hidden-sm-and-up pa-0 even-content section-content-mobile>
-            <v-toolbar color="#1C1B20" flat depressed style="color:whitesmoke;height: 15%;" class="py-1">
-              <v-layout column wrap fill-width justify-center>
-                <v-toolbar-title class="subheading strong text-xs-center pb-2" v-text="'Send email to us for further inquiry'" />
-                <v-toolbar-items class="justify-center pb-3">
-                  <v-btn :href="config.mailLink">Contact Us</v-btn>
-                </v-toolbar-items>
-              </v-layout>
-            </v-toolbar>
-            <v-layout row wrap fill-width align-center justify-center>
-              <template v-for="(contact, i) in contactList">
-                <v-avatar size="44px" :key="i" color="grey" class="mx-3 clickable" @click="goToLink(contact.value.value)">
-                  <v-img :src="contact.value.icon_src" max-height="30" max-width="30"></v-img>
-                </v-avatar>
-              </template>
-            </v-layout>
-            <v-toolbar color="#1C1B20" flat fill-width depressed style="color:whitesmoke; height: 5%;">
-              <v-layout xs12 row wrap fill-width justify-center>
-                <v-toolbar-title class="caption" v-text="'Created by Ordent'" />
-              </v-layout>
-            </v-toolbar>
-          </v-layout>
-        </template>
       </ksvuefp-section>
     </ksvuefp>
   </v-layout>
 </template>
+
+<page-query>
+  query Home {
+    welcomePost: allPost(filter: {id: {ne: "dummy"}, type: {eq: "home"}}) {
+      edges {
+        node {
+          id,
+          title,
+          type,
+          content
+        }
+      }
+    },
+    profilePost: allPost(filter: {id: {ne: "dummy"}, type: {eq: "profile"}}) {
+      edges {
+        node {
+          id,
+          title,
+          type,
+          content
+        }
+      }
+    },
+    productPost: allPost(filter: {id: {ne: "dummy"}, type: {eq: "product"}}) {
+      edges {
+        node {
+          id,
+          title,
+          type,
+          content
+        }
+      }
+    },
+    productItem:allProduct (filter:{id: {ne: "dummy"}}) {
+      edges {
+        node {
+          id,
+          image,
+          name,
+          price,
+          description
+        }
+      }
+    }
+  }
+</page-query>
             
 <script>
 import Logo from '~/components/Logo.vue'
@@ -304,16 +310,96 @@ export default {
       return this.$store.state.config
     },
     welcomePost() {
-      return this.$store.state.welcomePost
+      let welcomePost = {
+        id: 1,
+        title: 'Default Home',
+        content: '<p>Hello World!</p><p>Some initial <strong>Home</strong> text</p>',
+        cover: 'null'
+      }
+
+      if (this.$page.welcomePost.edges.length > 0){
+        welcomePost = this.$page.welcomePost.edges[0].node
+        
+        if (welcomePost.content != null) {
+          let content = JSON.parse(welcomePost.content)
+          welcomePost.content = content.html_content
+        }
+      }
+      return welcomePost
     },
     profilePost() {
-      return this.$store.state.profilePost
+      let profilePost = {
+        id: 1,
+        title: 'Default Profile',
+        content: '<p>Hello World!</p><p>Some initial <strong>Profile</strong> text</p>',
+        cover: 'null'
+      }
+
+      if (this.$page.profilePost.edges.length > 0){
+        profilePost = this.$page.profilePost.edges[0].node
+        
+        if (profilePost.content != null && profilePost.content != {}) {
+          let content = JSON.parse(profilePost.content)
+          profilePost.content = content.html_content
+        }
+      }
+      return profilePost
     },
     productPost() {
-      return this.$store.state.productPost
+      let productPost = {
+        id: 1,
+        title: 'Default Product',
+        content: '<p>Hello World!</p><p>Some initial <strong>Product</strong> text</p>',
+        cover: 'null'
+      }
+
+      if (this.$page.productPost.edges.length > 0){
+        productPost = this.$page.productPost.edges[0].node
+        
+        if (productPost.content != null && productPost.content != {}) {
+          let content = JSON.parse(productPost.content)
+          productPost.content = content.html_content
+        }
+      }
+      return productPost
     },
-    productList() {
-      return this.$store.state.productList
+    productCarousel() {
+      let productEdges = this.$page.productItem.edges
+      let productList = []
+      let productCarousel = []
+      let carouselItems = []
+
+      if (productEdges.length > 0){
+        for (let i = 0; i < productEdges.length; i++){
+          productList.push(productEdges[i].node)
+
+          if ((i+1) % 2 == 0){
+            productCarousel.push({
+              carouselItems: carouselItems
+            })
+            carouselItems = []
+          }
+        }
+      }
+      else {
+        for(let i = 1; i <= 6; i++) {
+          carouselItems.push({
+            id: i,
+            name: 'Default Product ' + i,
+            description: 'Default Description ' + i,
+            image: './images/default-icon-' + i + '.png'
+          })
+
+          if (i % 2 == 0){
+            productCarousel.push({
+              carouselItems: carouselItems
+            })
+            carouselItems = []
+          }
+        }
+      }
+      console.log(productCarousel)
+      return productCarousel
     },
     contactList() {
       let socialMedia = Object.assign([], this.$store.state.contactList)
@@ -377,15 +463,6 @@ export default {
 
     this.velocity = Velocity
     this.hammerjs = hammerjs
-
-    let params = this.$route.query
-    if (params.preview){
-      this.headers.Preview = params.preview
-      await this.loadSections(this.headers, params.type)
-    } else {
-      await this.loadSections(this.headers)
-      await this.fetchWelcomePost(this.headers)
-    }
   },
   methods: {
     goToLink(urlLink) {
@@ -409,8 +486,6 @@ export default {
             icon_url: config.home.menu_icon
           }
           contentSections.push(this.homeSection)
-
-          await this.fetchWelcomePost(headers)
 
           this.config = {
             title: 'User Config',
@@ -542,14 +617,6 @@ export default {
       }
       this.carouselLoading = false
     },
-    async fetchWelcomePost(headers) {
-      try {
-        await this.$store.dispatch('fetchWelcomePost', headers)
-      } catch(error) {
-        console.log(error)
-      }
-      this.pageLoading = false
-    },
     async fetchProfilePost(headers) {
       try {
         await this.$store.dispatch('fetchProfilePost', headers)
@@ -576,22 +643,21 @@ export default {
     }
   },
   watch: {
-    currentIndex: async function(newIndex, oldIndex) {
-      if (newIndex == 0){
-        this.pageLoading = true
-        await this.fetchWelcomePost(this.headers)
-      } else if (newIndex == 1) {
-        this.pageLoading = true
-        await this.fetchProfilePost(this.headers)
-      } else if (newIndex == 2) {
-        this.pageLoading = true
-        await this.fetchProductPost(this.headers)
-        await this.fetchProductList(1, 2, this.headers)
-      } else if (newIndex == 3) {
-        this.pageLoading = true
-        await this.fetchContactList(this.headers)
-      }
-    }
+    // currentIndex: async function(newIndex, oldIndex) {
+    //   if (newIndex == 0){
+    //     this.pageLoading = true
+    //   } else if (newIndex == 1) {
+    //     this.pageLoading = true
+    //     await this.fetchProfilePost(this.headers)
+    //   } else if (newIndex == 2) {
+    //     this.pageLoading = true
+    //     await this.fetchProductPost(this.headers)
+    //     await this.fetchProductList(1, 2, this.headers)
+    //   } else if (newIndex == 3) {
+    //     this.pageLoading = true
+    //     await this.fetchContactList(this.headers)
+    //   }
+    // }
   }
 }
 </script>

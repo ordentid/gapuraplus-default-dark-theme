@@ -1,0 +1,106 @@
+{
+    "post":{
+        "description": "Postingan pada website anda",
+        "slug_field": "title",
+        "content": [
+            {
+                "name": "Judul",
+                "key": "title",
+                "type": "text",
+                "browse": "true"
+            },
+            {
+                "name": "Latar",
+                "key" : "cover",
+                "type": "image"
+            },
+            {
+                "name": "Konten",
+                "key": "content",
+                "type": "rich_text_box"
+            },
+            {
+                "name": "Jenis",
+                "key": "type",
+                "type": "select",
+                "items": [
+                    {
+	                    "text": "Beranda",
+	                    "value": "home"
+                    },
+                    {
+	                    "text": "Profil",
+	                    "value": "profile"
+                    },
+                    {
+                        "text": "Header Produk",
+                        "value": "product"
+                    }
+                ]
+            }
+        ]
+    },
+    "product":{
+        "description":"item yang akan ditampilkan di halaman produk",
+        "slug_field": "name",
+        "content": [
+            {
+                "name": "Gambar",
+                "key" : "image",
+                "type": "image"
+            },
+            {
+                "name": "Nama",
+                "key": "name",
+                "type": "text",
+                "browse": true
+            },
+            {
+                "name": "Harga",
+                "key": "price",
+                "type": "text",
+                "browse": true
+            },
+            {
+                "name": "Deskripsi",
+                "key": "description",
+                "type": "textarea"
+            }
+        ]
+    },
+    "social_media": {
+        "description": "daftar link sosial media yang akan ditampilkan di website",
+        "content": [
+            {
+                "name": "Nama Sosial Media",
+                "key": "type",
+                "type": "select",
+                "browse": "true",
+                "items": [
+                    {
+	                    "text": "Facebook",
+	                    "value": "facebook"
+                    },
+                    {
+	                    "text": "Instagram",
+	                    "value": "instagram"
+                    },
+                    {
+                        "text": "Twitter",
+                        "value": "twitter"
+                    },
+                    {
+                        "text": "LinkedIn",
+                        "value": "linkedin"
+                    }
+                ]
+            },
+            {
+                "name": "URL",
+                "key": "url",
+                "type": "text",
+                "browse": "true"
+            }
+        ]
+    }
+}

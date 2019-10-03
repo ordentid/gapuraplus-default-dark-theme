@@ -391,9 +391,9 @@ export default {
 
       if (productEdges.length > 0){
         for (let i = 0; i < productEdges.length; i++){
-          productList.push(productEdges[i].node)
+          carouselItems.push(productEdges[i].node)
 
-          if ((i+1) % 2 == 0){
+          if ((i+1) % 2 == 0 || productCarousel.length == 0){
             productCarousel.push({
               carouselItems: carouselItems
             })
@@ -418,6 +418,7 @@ export default {
           }
         }
       }
+      console.log(productCarousel)
       return productCarousel
     },
     socialMedia() {

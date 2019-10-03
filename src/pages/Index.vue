@@ -604,7 +604,7 @@ html {
   height: 90%;
 }
 .v-window__container {
-  height: 100%;
+  height: 100% !important;
 }
 .v-window__container, .tab-content {
   height: 100%;

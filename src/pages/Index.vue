@@ -356,7 +356,7 @@ export default {
         welcomePost = this.$page.welcomePost.edges[0].node
         
         if (welcomePost.content != null) {
-          let content = JSON.parse(welcomePost.content)
+          let content = welcomePost.content
           welcomePost.content = content.html_content
         }
       }
@@ -374,7 +374,7 @@ export default {
         profilePost = this.$page.profilePost.edges[0].node
         
         if (profilePost.content != null && profilePost.content != {}) {
-          let content = JSON.parse(profilePost.content)
+          let content = profilePost.content
           profilePost.content = content.html_content
         }
       }
@@ -392,7 +392,7 @@ export default {
         productPost = this.$page.productPost.edges[0].node
         
         if (productPost.content != null && productPost.content != {}) {
-          let content = JSON.parse(productPost.content)
+          let content = productPost.content
           productPost.content = content.html_content
         }
       }

@@ -354,11 +354,6 @@ export default {
 
       if (this.$page.welcomePost.edges.length > 0){
         welcomePost = this.$page.welcomePost.edges[0].node
-        
-        if (welcomePost.content != null) {
-          let content = welcomePost.content
-          welcomePost.content = content.html_content
-        }
       }
       return welcomePost
     },
@@ -372,11 +367,6 @@ export default {
 
       if (this.$page.profilePost.edges.length > 0){
         profilePost = this.$page.profilePost.edges[0].node
-        
-        if (profilePost.content != null && profilePost.content != {}) {
-          let content = profilePost.content
-          profilePost.content = content.html_content
-        }
       }
       return profilePost
     },
@@ -390,11 +380,6 @@ export default {
 
       if (this.$page.productPost.edges.length > 0){
         productPost = this.$page.productPost.edges[0].node
-        
-        if (productPost.content != null && productPost.content != {}) {
-          let content = productPost.content
-          productPost.content = content.html_content
-        }
       }
       return productPost
     },
@@ -617,6 +602,9 @@ html {
 }
 .v-window, .tab-content {
   height: 90%;
+}
+.v-window__container {
+  height: 100%;
 }
 .v-window__container, .tab-content {
   height: 100%;

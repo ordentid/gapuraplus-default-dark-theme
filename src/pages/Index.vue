@@ -281,7 +281,8 @@
           id,
           title,
           type,
-          content
+          content,
+          cover
         }
       }
     },
@@ -291,7 +292,8 @@
           id,
           title,
           type,
-          content
+          content,
+          cover
         }
       }
     },
@@ -301,7 +303,8 @@
           id,
           title,
           type,
-          content
+          content,
+          cover
         }
       }
     },
